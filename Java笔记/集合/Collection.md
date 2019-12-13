@@ -1,6 +1,6 @@
-# 集合(Collection)
+# Collection
 
-Collection是一个接口，不能直接创建对象
+Collection是单列集合的顶层接口，不能直接创建对象
 
 ### 常用方法
 
