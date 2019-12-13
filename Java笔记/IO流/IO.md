@@ -26,5 +26,15 @@
     Reader
   
     Writer
+  
+* 代码
+
+  ```java
+  BufferedReader bufferedReader = new BufferedReader(
+                                  new InputStreamReader(
+                                  new FileInputStream(file), "GBK"));
+  ```
+
+  
 
 ![](../../asset/IO.png)
