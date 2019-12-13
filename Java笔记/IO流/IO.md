@@ -28,4 +28,4 @@
   
     Writer
 
-<img src="/../../asset/IO.png" alt="IO示意图"  />
+![](../../asset/IO.png)
