@@ -30,9 +30,14 @@
 * 代码
 
   ```java
+  //指定编码集
   BufferedReader bufferedReader = new BufferedReader(
                                   new InputStreamReader(
                                   new FileInputStream(file), "GBK"));
+  
+  //默认编码集
+    BufferedReader bufferedReader = new BufferedReader(
+                                    new FileReader(file));
   ```
 
   
