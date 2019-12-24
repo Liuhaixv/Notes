@@ -1,0 +1,1270 @@
+<!DOCTYPE html>
+<!-- saved from url=(0047)https://www.cnblogs.com/zhisheng/p/9206758.html -->
+<html lang="zh-cn"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="referrer" content="never">
+    <meta property="og:description" content="前言 为什么会写这篇文章？因为这些天在看《阿里巴巴开发手册详尽版》，没看过的可以关注微信公众号： zhisheng ，回复关键字： 阿里巴巴开发手册详尽版 就可以获得。 关注我 转载请务必注明原创地址">
+    <meta http-equiv="Cache-Control" content="no-transform">
+    <meta http-equiv="Cache-Control" content="no-siteapp">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>SimpleDateFormat 如何安全的使用？ - zhisheng_tian - 博客园</title>
+    
+    <link rel="stylesheet" href="./SimpleDateFormat 如何安全的使用？ - zhisheng_tian - 博客园_files/blog-common.min.css">
+    <link id="MainCss" rel="stylesheet" href="./SimpleDateFormat 如何安全的使用？ - zhisheng_tian - 博客园_files/bundle-codinglife.min.css">
+    
+    <link id="mobile-style" media="only screen and (max-width: 767px)" type="text/css" rel="stylesheet" href="./SimpleDateFormat 如何安全的使用？ - zhisheng_tian - 博客园_files/bundle-codinglife-mobile.min.css">
+    
+    <link type="application/rss+xml" rel="alternate" href="https://www.cnblogs.com/zhisheng/rss">
+    <link type="application/rsd+xml" rel="EditURI" href="https://www.cnblogs.com/zhisheng/rsd.xml">
+    <link type="application/wlwmanifest+xml" rel="wlwmanifest" href="https://www.cnblogs.com/zhisheng/wlwmanifest.xml">
+    <script async="" src="./SimpleDateFormat 如何安全的使用？ - zhisheng_tian - 博客园_files/analytics.js"></script><script src="./SimpleDateFormat 如何安全的使用？ - zhisheng_tian - 博客园_files/jquery-2.2.0.min.js"></script>
+    <script src="./SimpleDateFormat 如何安全的使用？ - zhisheng_tian - 博客园_files/blog-common.min.js"></script>
+    <script>
+        var currentBlogId = 427878;
+        var currentBlogApp = 'zhisheng';
+        var cb_enable_mathjax = false;
+        var isLogined = false;
+    </script>
+    
+    
+    
+</head>
+<body>
+    <a name="top"></a>
+    
+    
+<!--done-->
+<div id="home">
+<div id="header">
+	<div id="blogTitle">
+        <a id="lnkBlogLogo" href="https://www.cnblogs.com/zhisheng/"><img id="blogLogo" src="./SimpleDateFormat 如何安全的使用？ - zhisheng_tian - 博客园_files/logo.gif" alt="返回主页"></a>		
+		
+<!--done-->
+<h1><a id="Header1_HeaderTitle" class="headermaintitle HeaderMainTitle" href="https://www.cnblogs.com/zhisheng/">www.54tianzhisheng.cn</a>
+</h1>
+<h2>
+我的原创博客：http://www.54tianzhisheng.cn/
+公众号：zhisheng
+</h2>
+
+
+
+
+		
+	</div><!--end: blogTitle 博客的标题和副标题 -->
+	<div id="navigator">
+		
+<ul id="navList">
+<li><a id="blog_nav_sitehome" class="menu" href="https://www.cnblogs.com/">
+博客园</a>
+</li>
+<li>
+<a id="blog_nav_myhome" class="menu" href="https://www.cnblogs.com/zhisheng/">
+首页</a>
+</li>
+<li>
+
+<a id="blog_nav_newpost" class="menu" href="https://i.cnblogs.com/EditPosts.aspx?opt=1">
+新随笔</a>
+</li>
+<li>
+<a id="blog_nav_contact" class="menu" href="https://msg.cnblogs.com/send/zhisheng_tian">
+联系</a></li>
+<li>
+<a id="blog_nav_rss" class="menu" href="https://www.cnblogs.com/zhisheng/rss/">
+订阅</a>
+<!--<partial name="./Shared/_XmlLink.cshtml" model="Model" /></li>--></li>
+<li>
+<a id="blog_nav_admin" class="menu" href="https://i.cnblogs.com/">
+管理</a>
+</li>
+</ul>
+
+
+		<div class="blogStats">
+			
+			<span id="stats_post_count">随笔 - 
+58&nbsp; </span>
+<span id="stats_article_count">文章 - 
+3&nbsp; </span>
+<span id="stats-comment_count">评论 - 
+5</span>
+
+			
+		</div><!--end: blogStats -->
+	</div><!--end: navigator 博客导航栏 -->
+</div><!--end: header 头部 -->
+
+<div id="main">
+	<div id="mainContent">
+	<div class="forFlow">
+		<div id="post_detail">
+    <!--done-->
+    <div id="topics">
+        <div class="post">
+            <h1 class="postTitle">
+                
+<a id="cb_post_title_url" class="postTitle2" href="https://www.cnblogs.com/zhisheng/p/9206758.html">SimpleDateFormat 如何安全的使用？</a>
+
+            </h1>
+            <div class="clear"></div>
+            <div class="postBody">
+                
+<div id="cnblogs_post_body" class="blogpost-body cnblogs-markdown">
+    <p><img src="./SimpleDateFormat 如何安全的使用？ - zhisheng_tian - 博客园_files/006tKfTcgy1fshewu3v3yj31hc0zkwix.jpg" alt="001"></p>
+<h3 id="前言">&nbsp;前言</h3>
+<p>为什么会写这篇文章？因为这些天在看《阿里巴巴开发手册详尽版》，没看过的可以关注微信公众号：<strong>zhisheng</strong>，回复关键字：<strong>阿里巴巴开发手册详尽版</strong> 就可以获得。</p>
+<h3 id="关注我">关注我</h3>
+<p><img src="./SimpleDateFormat 如何安全的使用？ - zhisheng_tian - 博客园_files/C6LG3mGa12.jpg" alt="mark"></p>
+<p>转载请务必注明原创地址为：<a href="http://www.54tianzhisheng.cn/2018/06/19/SimpleDateFormat/" class="uri">http://www.54tianzhisheng.cn/2018/06/19/SimpleDateFormat/</a></p>
+<p>在看的过程中有这么一条：</p>
+<blockquote>
+<p><strong>【强制】SimpleDateFormat 是线程不安全的类，一般不要定义为 static 变量，如果定义为 static，必须加锁，或者使用 DateUtils 工具类。 </strong></p>
+</blockquote>
+<p>看到这条我立马就想起了我实习的时候有个项目里面就犯了这个错误，记得当时是这样写的：</p>
+<pre class="java"><code class="hljs"><span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> SimpleDateFormat df = <span class="hljs-keyword">new</span> SimpleDateFormat(<span class="hljs-string">"yyyyMMddHHmmss"</span>);</code></pre>
+<p>所以才认真的去研究下这个 SimpleDateFormat，所以才有了这篇文章。</p>
+<h3 id="它是谁">它是谁？</h3>
+<p>想必大家对 <code>SimpleDateFormat</code> 并不陌生。<code>SimpleDateFormat</code> 是 Java 中一个非常常用的类，他是以区域敏感的方式格式化和解析日期的具体类。 它允许格式化 (date -&gt; text)、语法分析 (text -&gt; date)和标准化。</p>
+<p><code>SimpleDateFormat</code> 允许以任何用户指定的日期-时间格式方式启动。 但是，建议使用 <code>DateFormat</code> 中的 <code>getTimeInstance</code>、 <code>getDateInstance</code> 或 <code>getDateTimeInstance</code> 方法来创建一个日期-时间格式。 这几个方法会返回一个默认的日期／时间格式。 你可以根据需要用 <code>applyPattern</code> 方法修改格式方式。</p>
+<h3 id="日期时间格式">日期时间格式</h3>
+<p>日期和时间格式由 <strong>日期和时间模式字符串</strong> 指定。在 <strong>日期和时间模式字符串</strong> 中，未加引号的字母 'A' 到 'Z' 和 'a' 到 'z' 被解释为模式字母，用来表示日期或时间字符串元素。文本可以使用单引号 (') 引起来，以免进行解释。所有其他字符均不解释，只是在格式化时将它们简单复制到输出字符串。</p>
+<p>简单的讲：这些 A ——Z，a —— z 这些字母(不被单引号包围的)会被特殊处理替换为对应的日期时间，其他的字符串还是原样输出。</p>
+<p>日期和时间模式(<strong>注意大小写，代表的含义是不同的</strong>)如下：</p>
+<p><img src="./SimpleDateFormat 如何安全的使用？ - zhisheng_tian - 博客园_files/006tKfTcgy1fshewuz8vij30vm150tfw.jpg" alt="2018-06-19_11-17-43"></p>
+<h3 id="怎么使用">怎么使用？</h3>
+<p>日期／时间格式模版样例：（给的时间是：2001-07-04 12:08:56 U.S. Pacific Time time zone）</p>
+<p><img src="./SimpleDateFormat 如何安全的使用？ - zhisheng_tian - 博客园_files/006tKfTcgy1fshewwuu6pj30x20mqwio.jpg" alt="2018-06-19_11-27-39"></p>
+<p>使用方法：</p>
+<pre class="java"><code class="hljs"><span class="hljs-keyword">import</span> java.text.SimpleDateFormat;
+<span class="hljs-keyword">import</span> java.util.Date;
+<span class="hljs-comment">/**
+ * Created by zhisheng_tian on 2018/6/19
+ */</span>
+<span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">FormatDateTime</span> </span>{
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] args)</span> </span>{
+        SimpleDateFormat myFmt = <span class="hljs-keyword">new</span> SimpleDateFormat(<span class="hljs-string">"yyyy年MM月dd日 HH时mm分ss秒"</span>);
+        SimpleDateFormat myFmt1 = <span class="hljs-keyword">new</span> SimpleDateFormat(<span class="hljs-string">"yy/MM/dd HH:mm"</span>);
+        SimpleDateFormat myFmt2 = <span class="hljs-keyword">new</span> SimpleDateFormat(<span class="hljs-string">"yyyy-MM-dd HH:mm:ss"</span>);<span class="hljs-comment">//等价于now.toLocaleString()</span>
+        SimpleDateFormat myFmt3 = <span class="hljs-keyword">new</span> SimpleDateFormat(<span class="hljs-string">"yyyy年MM月dd日 HH时mm分ss秒 E "</span>);
+        SimpleDateFormat myFmt4 = <span class="hljs-keyword">new</span> SimpleDateFormat(<span class="hljs-string">"一年中的第 D 天 一年中第w个星期 一月中第W个星期 在一天中k时 z时区"</span>);
+        Date now = <span class="hljs-keyword">new</span> Date();
+        System.out.println(myFmt.format(now));
+        System.out.println(myFmt1.format(now));
+        System.out.println(myFmt2.format(now));
+        System.out.println(myFmt3.format(now));
+        System.out.println(myFmt4.format(now));
+        System.out.println(now.toGMTString());
+        System.out.println(now.toLocaleString());
+        System.out.println(now.toString());
+    }
+}</code></pre>
+<p>结果是：</p>
+<pre><code class="hljs less"><span class="hljs-selector-tag">2018</span>年<span class="hljs-selector-tag">06</span>月<span class="hljs-selector-tag">19</span>日 <span class="hljs-selector-tag">23</span>时<span class="hljs-selector-tag">10</span>分<span class="hljs-selector-tag">05</span>秒
+<span class="hljs-selector-tag">18</span>/<span class="hljs-selector-tag">06</span>/<span class="hljs-selector-tag">19</span> <span class="hljs-selector-tag">23</span><span class="hljs-selector-pseudo">:10</span>
+<span class="hljs-selector-tag">2018-06-19</span> <span class="hljs-selector-tag">23</span><span class="hljs-selector-pseudo">:10</span><span class="hljs-selector-pseudo">:05</span>
+<span class="hljs-selector-tag">2018</span>年<span class="hljs-selector-tag">06</span>月<span class="hljs-selector-tag">19</span>日 <span class="hljs-selector-tag">23</span>时<span class="hljs-selector-tag">10</span>分<span class="hljs-selector-tag">05</span>秒 星期二
+一年中的第 <span class="hljs-selector-tag">170</span> 天 一年中第<span class="hljs-selector-tag">25</span>个星期 一月中第<span class="hljs-selector-tag">4</span>个星期 在一天中<span class="hljs-selector-tag">23</span>时 <span class="hljs-selector-tag">CST</span>时区
+<span class="hljs-selector-tag">19</span> <span class="hljs-selector-tag">Jun</span> <span class="hljs-selector-tag">2018</span> <span class="hljs-selector-tag">15</span><span class="hljs-selector-pseudo">:10</span><span class="hljs-selector-pseudo">:05</span> <span class="hljs-selector-tag">GMT</span>
+<span class="hljs-selector-tag">2018-6-19</span> <span class="hljs-selector-tag">23</span><span class="hljs-selector-pseudo">:10</span><span class="hljs-selector-pseudo">:05</span>
+<span class="hljs-selector-tag">Tue</span> <span class="hljs-selector-tag">Jun</span> <span class="hljs-selector-tag">19</span> <span class="hljs-selector-tag">23</span><span class="hljs-selector-pseudo">:10</span><span class="hljs-selector-pseudo">:05</span> <span class="hljs-selector-tag">CST</span> <span class="hljs-selector-tag">2018</span></code></pre>
+<p>使用方法很简单，就是先自己定义好时间／日期模版，然后调用 format 方法（传入一个时间 Date 参数）。</p>
+<p>上面的是日期转换成自己想要的字符串格式。下面反过来，将字符串类型装换成日期类型：</p>
+<pre class="java"><code class="hljs"><span class="hljs-keyword">import</span> java.text.ParseException;
+<span class="hljs-keyword">import</span> java.text.SimpleDateFormat;
+<span class="hljs-keyword">import</span> java.util.Date;
+<span class="hljs-comment">/**
+ * Created by zhisheng_tian on 2018/6/19
+ */</span>
+<span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">StringFormatDate</span> </span>{
+
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] args)</span> </span>{
+        String time1 = <span class="hljs-string">"2018年06月19日 23时10分05秒"</span>;
+        String time2 = <span class="hljs-string">"18/06/19 23:10"</span>;
+        String time3 = <span class="hljs-string">"2018-06-19 23:10:05"</span>;
+        String time4 = <span class="hljs-string">"2018年06月19日 23时10分05秒 星期二"</span>;
+
+        SimpleDateFormat myFmt = <span class="hljs-keyword">new</span> SimpleDateFormat(<span class="hljs-string">"yyyy年MM月dd日 HH时mm分ss秒"</span>);
+        SimpleDateFormat myFmt1 = <span class="hljs-keyword">new</span> SimpleDateFormat(<span class="hljs-string">"yy/MM/dd HH:mm"</span>);
+        SimpleDateFormat myFmt2 = <span class="hljs-keyword">new</span> SimpleDateFormat(<span class="hljs-string">"yyyy-MM-dd HH:mm:ss"</span>);<span class="hljs-comment">//等价于now.toLocaleString()</span>
+        SimpleDateFormat myFmt3 = <span class="hljs-keyword">new</span> SimpleDateFormat(<span class="hljs-string">"yyyy年MM月dd日 HH时mm分ss秒 E"</span>);
+
+        Date date1 = <span class="hljs-keyword">null</span>;
+        <span class="hljs-keyword">try</span> {
+            date1 = myFmt.parse(time1);
+        } <span class="hljs-keyword">catch</span> (ParseException e) {
+            e.printStackTrace();
+        }
+        System.out.println(date1);
+
+        Date date2 = <span class="hljs-keyword">null</span>;
+        <span class="hljs-keyword">try</span> {
+            date2 = myFmt1.parse(time2);
+        } <span class="hljs-keyword">catch</span> (ParseException e) {
+            e.printStackTrace();
+        }
+        System.out.println(date2);
+
+        Date date3 = <span class="hljs-keyword">null</span>;
+        <span class="hljs-keyword">try</span> {
+            date3 = myFmt2.parse(time3);
+        } <span class="hljs-keyword">catch</span> (ParseException e) {
+            e.printStackTrace();
+        }
+        System.out.println(date3);
+
+        Date date4 = <span class="hljs-keyword">null</span>;
+        <span class="hljs-keyword">try</span> {
+            date4 = myFmt3.parse(time4);
+        } <span class="hljs-keyword">catch</span> (ParseException e) {
+            e.printStackTrace();
+        }
+        System.out.println(date4);
+    }
+}</code></pre>
+<p>结果是：</p>
+<pre><code class="hljs less"><span class="hljs-selector-tag">Tue</span> <span class="hljs-selector-tag">Jun</span> <span class="hljs-selector-tag">19</span> <span class="hljs-selector-tag">23</span><span class="hljs-selector-pseudo">:10</span><span class="hljs-selector-pseudo">:05</span> <span class="hljs-selector-tag">CST</span> <span class="hljs-selector-tag">2018</span>
+<span class="hljs-selector-tag">Tue</span> <span class="hljs-selector-tag">Jun</span> <span class="hljs-selector-tag">19</span> <span class="hljs-selector-tag">23</span><span class="hljs-selector-pseudo">:10</span><span class="hljs-selector-pseudo">:00</span> <span class="hljs-selector-tag">CST</span> <span class="hljs-selector-tag">2018</span>
+<span class="hljs-selector-tag">Tue</span> <span class="hljs-selector-tag">Jun</span> <span class="hljs-selector-tag">19</span> <span class="hljs-selector-tag">23</span><span class="hljs-selector-pseudo">:10</span><span class="hljs-selector-pseudo">:05</span> <span class="hljs-selector-tag">CST</span> <span class="hljs-selector-tag">2018</span>
+<span class="hljs-selector-tag">Tue</span> <span class="hljs-selector-tag">Jun</span> <span class="hljs-selector-tag">19</span> <span class="hljs-selector-tag">23</span><span class="hljs-selector-pseudo">:10</span><span class="hljs-selector-pseudo">:05</span> <span class="hljs-selector-tag">CST</span> <span class="hljs-selector-tag">2018</span></code></pre>
+<p>这个转换方法也很简单。但是不要高兴的太早，主角不在这。</p>
+<h3 id="线程不安全">线程不安全</h3>
+<p><img src="./SimpleDateFormat 如何安全的使用？ - zhisheng_tian - 博客园_files/006tKfTcgy1fsheww10htj31g40wedm3.jpg" alt="2018-06-19_23-56-29"></p>
+<p>在 SimpleDateFormat 类的 JavaDoc 中，描述了该类不能够保证线程安全，建议为每个线程创建单独的日期／时间格式实例，如果多个线程同时访问一个日期／时间格式，它必须在外部进行同步。那么在多线程环境下调用 format() 和 parse() 方法应该使用同步代码来避免问题。下面我们通过一个具体的场景来一步步的深入学习和理解SimpleDateFormat 类。</p>
+<p>1、每个线程创建单独的日期／时间格式实例</p>
+<blockquote>
+<p>大量的创建 SimpleDateFormat 实例对象，然后再丢弃这个对象，占用大量的内存和 JVM 空间。</p>
+</blockquote>
+<p>2、创建一个静态的 SimpleDateFormat 实例，在使用时直接使用这个实例进行操作（我当时就是这么干的😄）</p>
+<pre class="java"><code class="hljs"><span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> SimpleDateFormat df = <span class="hljs-keyword">new</span> SimpleDateFormat(<span class="hljs-string">"yyyy-MM-dd HH:mm:ss"</span>);
+Date date = <span class="hljs-keyword">new</span> Date();
+df.format(date);</code></pre>
+<p>当然，这个方法的确很不错，在大部分的时间里面都会工作得很好，但一旦在生产环境中一定负载情况下时，这个问题就出来了。他会出现各种不同的情况，比如转化的时间不正确，比如报错，比如线程被挂死等等。我们看下面的测试用例，拿事实说话：</p>
+<pre class="java"><code class="hljs"><span class="hljs-keyword">import</span> java.text.ParseException;
+<span class="hljs-keyword">import</span> java.text.SimpleDateFormat;
+<span class="hljs-keyword">import</span> java.util.Date;
+<span class="hljs-comment">/**
+ * Created by zhisheng_tian on 2018/6/20
+ */</span>
+<span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">DateUtils</span> </span>{
+    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> SimpleDateFormat sdf = <span class="hljs-keyword">new</span> SimpleDateFormat(<span class="hljs-string">"yyyy-MM-dd HH:mm:ss"</span>);
+
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> String <span class="hljs-title">formatDate</span><span class="hljs-params">(Date date)</span> <span class="hljs-keyword">throws</span> ParseException </span>{
+        <span class="hljs-keyword">return</span> sdf.format(date);
+    }
+
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> Date <span class="hljs-title">parse</span><span class="hljs-params">(String strDate)</span> <span class="hljs-keyword">throws</span> ParseException </span>{
+        <span class="hljs-keyword">return</span> sdf.parse(strDate);
+    }
+}</code></pre>
+<pre class="java"><code class="hljs"><span class="hljs-keyword">import</span> java.text.ParseException;
+<span class="hljs-comment">/**
+ * Created by zhisheng_tian on 2018/6/20
+ */</span>
+<span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">DateUtilsTest</span> </span>{
+    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">TestSimpleDateFormatThreadSafe</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Thread</span> </span>{
+        <span class="hljs-meta">@Override</span>
+        <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">run</span><span class="hljs-params">()</span> </span>{
+            <span class="hljs-keyword">while</span> (<span class="hljs-keyword">true</span>) {
+                <span class="hljs-keyword">try</span> {
+                    <span class="hljs-keyword">this</span>.join(<span class="hljs-number">2000</span>);
+                } <span class="hljs-keyword">catch</span> (InterruptedException e1) {
+                    e1.printStackTrace();
+                }
+                <span class="hljs-keyword">try</span> {
+                    System.out.println(<span class="hljs-keyword">this</span>.getName() + <span class="hljs-string">":"</span> + DateUtils.parse(<span class="hljs-string">"2018-06-20 01:18:20"</span>));
+                } <span class="hljs-keyword">catch</span> (ParseException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] args)</span> </span>{
+        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">3</span>; i++) {
+            <span class="hljs-keyword">new</span> TestSimpleDateFormatThreadSafe().start();
+        }
+    }
+}</code></pre>
+<p>运行结果如下：</p>
+<pre class="java"><code class="hljs">Exception in thread <span class="hljs-string">"Thread-0"</span> Exception in thread <span class="hljs-string">"Thread-1"</span> java.lang.NumberFormatException: For input string: <span class="hljs-string">""</span>
+    at java.lang.NumberFormatException.forInputString(NumberFormatException.java:<span class="hljs-number">65</span>)
+    at java.lang.Long.parseLong(Long.java:<span class="hljs-number">601</span>)
+    at java.lang.Long.parseLong(Long.java:<span class="hljs-number">631</span>)
+    at java.text.DigitList.getLong(DigitList.java:<span class="hljs-number">195</span>)
+    at java.text.DecimalFormat.parse(DecimalFormat.java:<span class="hljs-number">2051</span>)
+    at java.text.SimpleDateFormat.subParse(SimpleDateFormat.java:<span class="hljs-number">1869</span>)
+    at java.text.SimpleDateFormat.parse(SimpleDateFormat.java:<span class="hljs-number">1514</span>)
+    at java.text.DateFormat.parse(DateFormat.java:<span class="hljs-number">364</span>)
+    at com.zhisheng.demo.date.DateUtils.parse(DateUtils.java:<span class="hljs-number">19</span>)
+    at com.zhisheng.demo.date.DateUtilsTest$TestSimpleDateFormatThreadSafe.run(DateUtilsTest.java:<span class="hljs-number">19</span>)
+java.lang.NumberFormatException: For input string: <span class="hljs-string">".1818"</span>
+    at java.lang.NumberFormatException.forInputString(NumberFormatException.java:<span class="hljs-number">65</span>)
+    at java.lang.Long.parseLong(Long.java:<span class="hljs-number">578</span>)
+    at java.lang.Long.parseLong(Long.java:<span class="hljs-number">631</span>)
+    at java.text.DigitList.getLong(DigitList.java:<span class="hljs-number">195</span>)
+    at java.text.DecimalFormat.parse(DecimalFormat.java:<span class="hljs-number">2051</span>)
+    at java.text.SimpleDateFormat.subParse(SimpleDateFormat.java:<span class="hljs-number">2162</span>)
+    at java.text.SimpleDateFormat.parse(SimpleDateFormat.java:<span class="hljs-number">1514</span>)
+    at java.text.DateFormat.parse(DateFormat.java:<span class="hljs-number">364</span>)
+    at com.zhisheng.demo.date.DateUtils.parse(DateUtils.java:<span class="hljs-number">19</span>)
+    at com.zhisheng.demo.date.DateUtilsTest$TestSimpleDateFormatThreadSafe.run(DateUtilsTest.java:<span class="hljs-number">19</span>)
+Thread-<span class="hljs-number">2</span>:Sat Jun <span class="hljs-number">20</span> <span class="hljs-number">01</span>:<span class="hljs-number">18</span>:<span class="hljs-number">20</span> CST <span class="hljs-number">2201</span>
+Thread-<span class="hljs-number">2</span>:Wed Jun <span class="hljs-number">20</span> <span class="hljs-number">01</span>:<span class="hljs-number">18</span>:<span class="hljs-number">20</span> CST <span class="hljs-number">2018</span>
+Thread-<span class="hljs-number">2</span>:Wed Jun <span class="hljs-number">20</span> <span class="hljs-number">01</span>:<span class="hljs-number">18</span>:<span class="hljs-number">20</span> CST <span class="hljs-number">2018</span>
+Thread-<span class="hljs-number">2</span>:Wed Jun <span class="hljs-number">20</span> <span class="hljs-number">01</span>:<span class="hljs-number">18</span>:<span class="hljs-number">20</span> CST <span class="hljs-number">2018</span></code></pre>
+<p>说明：Thread-1和Thread-0报java.lang.NumberFormatException: multiple points错误，直接挂死，没起来；Thread-2 虽然没有挂死，但输出的时间是有错误的，比如我们输入的时间是：2018-06-20 01:18:20 ，当会输出：Sat Jun 20 01:18:20 CST 2201 这样的灵异事件。</p>
+<h3 id="why">Why?</h3>
+<p>为什么会出现线程不安全的问题呢？</p>
+<p>下面我们通过看 JDK 源码来看看为什么 SimpleDateFormat 和 DateFormat 类不是线程安全的真正原因：</p>
+<p>SimpleDateFormat 继承了 DateFormat，在 DateFormat 中定义了一个 protected 属性的 Calendar 类的对象：calendar。只是因为 Calendar 类的概念复杂，牵扯到时区与本地化等等，JDK 的实现中使用了成员变量来传递参数，这就造成在多线程的时候会出现错误。</p>
+<p>在 SimpleDateFormat 中的 format 方法源码中：</p>
+<pre class="java"><code class="hljs"><span class="hljs-meta">@Override</span>
+<span class="hljs-function"><span class="hljs-keyword">public</span> StringBuffer <span class="hljs-title">format</span><span class="hljs-params">(Date date, StringBuffer toAppendTo,FieldPosition pos)</span> </span>{
+  pos.beginIndex = pos.endIndex = <span class="hljs-number">0</span>;
+  <span class="hljs-keyword">return</span> format(date, toAppendTo, pos.getFieldDelegate());
+}
+<span class="hljs-comment">// Called from Format after creating a FieldDelegate</span>
+<span class="hljs-function"><span class="hljs-keyword">private</span> StringBuffer <span class="hljs-title">format</span><span class="hljs-params">(Date date, StringBuffer toAppendTo,FieldDelegate delegate)</span> </span>{
+  <span class="hljs-comment">// Convert input date to time field list</span>
+  calendar.setTime(date);
+  <span class="hljs-keyword">boolean</span> useDateFormatSymbols = useDateFormatSymbols();
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>; i &lt; compiledPattern.length; ) {
+    <span class="hljs-keyword">int</span> tag = compiledPattern[i] &gt;&gt;&gt; <span class="hljs-number">8</span>;
+    <span class="hljs-keyword">int</span> count = compiledPattern[i++] &amp; <span class="hljs-number">0xff</span>;
+    <span class="hljs-keyword">if</span> (count == <span class="hljs-number">255</span>) {
+      count = compiledPattern[i++] &lt;&lt; <span class="hljs-number">16</span>;
+      count |= compiledPattern[i++];
+    }
+
+    <span class="hljs-keyword">switch</span> (tag) {
+      <span class="hljs-keyword">case</span> TAG_QUOTE_ASCII_CHAR:
+        toAppendTo.append((<span class="hljs-keyword">char</span>)count);
+        <span class="hljs-keyword">break</span>;
+      <span class="hljs-keyword">case</span> TAG_QUOTE_CHARS:
+        toAppendTo.append(compiledPattern, i, count);
+        i += count;
+        <span class="hljs-keyword">break</span>;
+      <span class="hljs-keyword">default</span>:
+        subFormat(tag, count, delegate, toAppendTo, useDateFormatSymbols);
+        <span class="hljs-keyword">break</span>;
+    }
+  }
+  <span class="hljs-keyword">return</span> toAppendTo;
+}</code></pre>
+<p>calendar.setTime(date) 这条语句改变了 calendar，稍后，calendar 还会用到（在 subFormat 方法里），而这就是引发问题的根源。想象一下，在一个多线程环境下，有两个线程持有了同一个 SimpleDateFormat 的实例，分别调用format 方法：</p>
+<pre><code class="hljs lua">线程 <span class="hljs-number">1</span> 调用 <span class="hljs-built_in">format</span> 方法，改变了 calendar 这个字段。
+线程 <span class="hljs-number">1</span> 中断了。
+线程 <span class="hljs-number">2</span> 开始执行，它也改变了 calendar。
+线程 <span class="hljs-number">2</span> 中断了。
+线程 <span class="hljs-number">1</span> 回来了</code></pre>
+<p>此时，calendar 已然不是它所设的值，而是走上了线程 2 设计的道路。如果多个线程同时争抢 calendar 对象，则会出现各种问题，时间不对，线程挂死等等。</p>
+<p>分析一下 format 的实现，我们不难发现，用到成员变量 calendar，唯一的好处，就是在调用 subFormat 时，少了一个参数，却带来了许多的问题。其实，只要在这里用一个局部变量，一路传递下去，所有问题都将迎刃而解。</p>
+<p>这个问题背后隐藏着一个更为重要的问题--无状态：无状态方法的好处之一，就是它在各种环境下，都可以安全的调用。衡量一个方法是否是有状态的，就看它是否改动了其它的东西，比如全局变量，比如实例的字段。format 方法在运行过程中改动了 SimpleDateFormat 的 calendar 字段，所以，它是有状态的。</p>
+<p>这也同时提醒我们在开发和设计系统的时候注意下一下三点:</p>
+<p><strong>1.自己写公用类的时候，要对多线程调用情况下的后果在注释里进行明确说明</strong></p>
+<p><strong>2.多线程环境下，对每一个共享的可变变量都要注意其线程安全性</strong></p>
+<p><strong>3.我们的类和方法在做设计的时候，要尽量设计成无状态的</strong></p>
+<h3 id="解决方法">解决方法</h3>
+<p>1、<strong>需要的时候创建新实例</strong></p>
+<p><strong>说明：</strong>在需要用到 SimpleDateFormat 的地方新建一个实例，不管什么时候，将有线程安全问题的对象由共享变为<strong>局部私有</strong>都能避免多线程问题，不过也加重了创建对象的负担。在一般情况下，这样其实对性能影响比不是很明显的。</p>
+<p>2、<strong>使用同步：同步 SimpleDateFormat 对象</strong></p>
+<pre class="java"><code class="hljs"><span class="hljs-keyword">import</span> java.text.ParseException;
+<span class="hljs-keyword">import</span> java.text.SimpleDateFormat;
+<span class="hljs-keyword">import</span> java.util.Date;
+
+<span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">DateSyncUtil</span> </span>{
+
+    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> SimpleDateFormat sdf = <span class="hljs-keyword">new</span> SimpleDateFormat(<span class="hljs-string">"yyyy-MM-dd HH:mm:ss"</span>);
+
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> String <span class="hljs-title">formatDate</span><span class="hljs-params">(Date date)</span> <span class="hljs-keyword">throws</span> ParseException </span>{
+        <span class="hljs-keyword">synchronized</span>(sdf) {
+            <span class="hljs-keyword">return</span> sdf.format(date);
+        }  
+    }
+
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> Date <span class="hljs-title">parse</span><span class="hljs-params">(String strDate)</span> <span class="hljs-keyword">throws</span> ParseException </span>{
+        <span class="hljs-keyword">synchronized</span>(sdf) {
+            <span class="hljs-keyword">return</span> sdf.parse(strDate);
+        }
+    }
+}</code></pre>
+<p><strong>说明：</strong>当线程较多时，当一个线程调用该方法时，其他想要调用此方法的线程就要 block 等待，多线程并发量大的时候会对性能有一定的影响。</p>
+<p>3、<strong>使用 ThreadLocal</strong></p>
+<pre><code class="hljs java"><span class="hljs-keyword">import</span> java.text.DateFormat;
+<span class="hljs-keyword">import</span> java.text.ParseException;
+<span class="hljs-keyword">import</span> java.text.SimpleDateFormat;
+<span class="hljs-keyword">import</span> java.util.Date;
+
+<span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">ConcurrentDateUtil</span> </span>{
+
+    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> ThreadLocal&lt;DateFormat&gt; threadLocal = <span class="hljs-keyword">new</span> ThreadLocal&lt;DateFormat&gt;() {
+        <span class="hljs-meta">@Override</span>
+        <span class="hljs-function"><span class="hljs-keyword">protected</span> DateFormat <span class="hljs-title">initialValue</span><span class="hljs-params">()</span> </span>{
+            <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> SimpleDateFormat(<span class="hljs-string">"yyyy-MM-dd HH:mm:ss"</span>);
+        }
+    };
+
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> Date <span class="hljs-title">parse</span><span class="hljs-params">(String dateStr)</span> <span class="hljs-keyword">throws</span> ParseException </span>{
+        <span class="hljs-keyword">return</span> threadLocal.get().parse(dateStr);
+    }
+
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> String <span class="hljs-title">format</span><span class="hljs-params">(Date date)</span> </span>{
+        <span class="hljs-keyword">return</span> threadLocal.get().format(date);
+    }
+}</code></pre>
+<p><strong>说明：</strong>使用 ThreadLocal, 也是将共享变量变为独享，线程独享肯定能比方法独享在并发环境中能减少不少创建对象的开销。如果对性能要求比较高的情况下，一般推荐使用这种方法。</p>
+<h3 id="java-8-中的解决办法">Java 8 中的解决办法</h3>
+<p>Java 8 提供了新的日期时间 API，其中包括用于日期时间格式化的 DateTimeFormatter，它与 SimpleDateFormat 最大的区别在于：DateTimeFormatter 是线程安全的，而 SimpleDateFormat 并不是线程安全。</p>
+<p><strong>DateTimeFormatter 如何使用：</strong></p>
+<p>解析日期</p>
+<pre class="java"><code class="hljs">String dateStr= <span class="hljs-string">"2018年06月20日"</span>;
+DateTimeFormatter formatter = DateTimeFormatter.ofPattern(<span class="hljs-string">"yyyy年MM月dd日"</span>);   
+LocalDate date= LocalDate.parse(dateStr, formatter);</code></pre>
+<p>日期转换为字符串</p>
+<pre class="java"><code class="hljs">LocalDateTime now = LocalDateTime.now();  
+DateTimeFormatter format = DateTimeFormatter.ofPattern(<span class="hljs-string">"yyyy年MM月dd日 hh:mm a"</span>);
+String nowStr = now .format(format);</code></pre>
+<p>由 DateTimeFormatter 的静态方法 ofPattern() 构建日期格式，LocalDateTime 和 LocalDate 等一些表示日期或时间的类使用 parse 和 format 方法把日期和字符串做转换。</p>
+<p>使用新的 API，整个转换过程都不需要考虑线程安全的问题。</p>
+<h3 id="总结">总结</h3>
+<p>SimpleDateFormat 是线程不安全的类，多线程环境下注意线程安全问题，如果是 Java 8 ，建议使用 DateTimeFormatter 代替 SimpleDateFormat。</p>
+<h3 id="参考资料">参考资料</h3>
+<p><a href="https://www.cnblogs.com/zhisheng/p/9206758.html">http://www.cnblogs.com/peida/archive/2013/05/31/3070790.html</a></p>
+<h3 id="相关文章">相关文章</h3>
+<p><a href="http://www.54tianzhisheng.cn/2018/06/20/java-8-date/">20 个案例教你在 Java 8 中如何处理日期和时间?</a></p>
+
+</div>
+<div id="MySignature"></div>
+<div class="clear"></div>
+<div id="blog_post_info_block">
+<div id="EntryTag">
+    标签: 
+            <a href="https://www.cnblogs.com/zhisheng/tag/java/">java</a></div>
+
+    <div id="blog_post_info">
+<div id="green_channel">
+        <a href="javascript:void(0);" id="green_channel_digg" onclick="DiggIt(9206758,cb_blogId,1);green_channel_success(this,&#39;谢谢推荐！&#39;);">好文要顶</a>
+        <a id="green_channel_follow" onclick="follow(&#39;a997b3d9-52a5-e511-9fc1-ac853d9f53cc&#39;);" href="javascript:void(0);">关注我</a>
+    <a id="green_channel_favorite" onclick="AddToWz(cb_entryId);return false;" href="javascript:void(0);">收藏该文</a>
+    <a id="green_channel_weibo" href="javascript:void(0);" title="分享至新浪微博" onclick="ShareToTsina()"><img src="./SimpleDateFormat 如何安全的使用？ - zhisheng_tian - 博客园_files/icon_weibo_24.png" alt=""></a>
+    <a id="green_channel_wechat" href="javascript:void(0);" title="分享至微信" onclick="shareOnWechat()"><img src="./SimpleDateFormat 如何安全的使用？ - zhisheng_tian - 博客园_files/wechat.png" alt=""></a>
+</div>
+<div id="author_profile">
+    <div id="author_profile_info" class="author_profile_info">
+            <a href="https://home.cnblogs.com/u/zhisheng/" target="_blank"><img src="./SimpleDateFormat 如何安全的使用？ - zhisheng_tian - 博客园_files/20180421160904.png" class="author_avatar" alt=""></a>
+        <div id="author_profile_detail" class="author_profile_info">
+            <a href="https://home.cnblogs.com/u/zhisheng/">zhisheng_tian</a><br>
+            <a href="https://home.cnblogs.com/u/zhisheng/followees/">关注 - 0</a><br>
+            <a href="https://home.cnblogs.com/u/zhisheng/followers/">粉丝 - 22</a>
+        </div>
+    </div>
+    <div class="clear"></div>
+    <div id="author_profile_honor"></div>
+    <div id="author_profile_follow">
+                <a href="javascript:void(0);" onclick="follow(&#39;a997b3d9-52a5-e511-9fc1-ac853d9f53cc&#39;);return false;">+加关注</a>
+    </div>
+</div>
+<div id="div_digg">
+    <div class="diggit" onclick="votePost(9206758,&#39;Digg&#39;)">
+        <span class="diggnum" id="digg_count">0</span>
+    </div>
+    <div class="buryit" onclick="votePost(9206758,&#39;Bury&#39;)">
+        <span class="burynum" id="bury_count">0</span>
+    </div>
+    <div class="clear"></div>
+    <div class="diggword" id="digg_tips">
+    </div>
+</div>
+
+<script type="text/javascript">
+    currentDiggType = 0;
+</script></div>
+    <div class="clear"></div>
+    <div id="post_next_prev">
+
+    <a href="https://www.cnblogs.com/zhisheng/p/8982845.html" class="p_n_p_prefix">« </a> 上一篇：    <a href="https://www.cnblogs.com/zhisheng/p/8982845.html" title="发布于 2018-05-02 22:17">Spring Boot 2.0系列文章(七)：SpringApplication 深入探索</a>
+    <br>
+    <a href="https://www.cnblogs.com/zhisheng/p/9206778.html" class="p_n_p_prefix">» </a> 下一篇：    <a href="https://www.cnblogs.com/zhisheng/p/9206778.html" title="发布于 2018-06-21 00:19">20 个案例教你在 Java 8 中如何处理日期和时间?</a>
+
+</div>
+</div>
+            </div>
+            <div class="postDesc">posted @ 
+<span id="post-date">2018-06-21 00:07</span>&nbsp;
+<a href="https://www.cnblogs.com/zhisheng/">zhisheng_tian</a>&nbsp;
+阅读(<span id="post_view_count">957</span>)&nbsp;
+评论(<span id="post_comment_count">2</span>)&nbsp;
+<a href="https://i.cnblogs.com/EditPosts.aspx?postid=9206758" rel="nofollow">
+    编辑
+</a>
+<a href="javascript:void(0)" onclick="AddToWz(9206758);return false;">收藏</a></div>
+        </div>
+	    
+	    
+    </div><!--end: topics 文章、评论容器-->
+</div>
+<script src="./SimpleDateFormat 如何安全的使用？ - zhisheng_tian - 博客园_files/highlight.min.js"></script>
+<script>markdown_highlight();</script>
+<script>
+    var allowComments = true, cb_blogId = 427878, cb_blogApp = 'zhisheng', cb_blogUserGuid = 'a997b3d9-52a5-e511-9fc1-ac853d9f53cc';
+    var cb_entryId = 9206758, cb_entryCreatedDate = '2018-06-21 00:07', cb_postType = 1; 
+    loadViewCount(cb_entryId);
+</script><a name="!comments"></a>
+<div id="blog-comments-placeholder">
+
+<div id="comment_pager_top">
+    
+</div>
+
+<br>
+<div class="feedback_area_title">评论列表</div>
+<div class="feedbackNoItems"><div class="feedbackNoItems"></div></div>	
+		<div class="feedbackItem">
+			<div class="feedbackListSubtitle">
+				<div class="feedbackManage">
+					&nbsp;&nbsp;
+
+<span class="comment_actions">
+    
+    
+    
+    
+</span>
+
+
+				</div>
+				
+<a href="https://www.cnblogs.com/zhisheng/p/9206758.html#4002103" class="layer">#1楼</a>
+<a name="4002103" id="comment_anchor_4002103"></a>
+
+ 
+<span class="comment_date">2018-06-21 04:42</span>
+
+ 
+
+            <a id="a_comment_author_4002103" href="https://home.cnblogs.com/u/783622/" target="_blank">unmi.cc</a>
+
+			</div>
+			<div class="feedbackCon">
+				
+<div id="comment_body_4002103" class="blog_comment_body">
+    Java 8 了，就必须用 DateTimeFormatter
+</div>
+        <div class="comment_vote">
+            <span class="comment_error" style="color: red"></span>
+            <a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(4002103, &#39;Digg&#39;, this.parentElement, false);">
+                支持(0)
+            </a>
+            <a href="javascript:void(0);" class="comment_burry" onclick="return voteComment(4002103, &#39;Bury&#39;, this.parentElement, false);">
+                反对(0)
+            </a>
+        </div>
+        
+
+			</div>
+		</div>
+		<div class="feedbackItem">
+			<div class="feedbackListSubtitle">
+				<div class="feedbackManage">
+					&nbsp;&nbsp;
+
+<span class="comment_actions">
+    
+    
+    
+    
+</span>
+
+
+				</div>
+				
+<a href="https://www.cnblogs.com/zhisheng/p/9206758.html#4002775" class="layer">#2楼</a>
+<a name="4002775" id="comment_anchor_4002775"></a>
+[<span class="louzhu">楼主</span>]
+        <span id="comment-maxId" style="display:none">4002775</span>
+        <span id="comment-maxDate" style="display:none">2018/6/21 下午5:57:39</span>
+ 
+<span class="comment_date">2018-06-21 17:57</span>
+
+ 
+
+            <a id="a_comment_author_4002775" href="https://www.cnblogs.com/zhisheng/" target="_blank">zhisheng_tian</a>
+
+			</div>
+			<div class="feedbackCon">
+				
+<div id="comment_body_4002775" class="blog_comment_body">
+    <a href="https://www.cnblogs.com/zhisheng/p/9206758.html#4002103" title="查看所回复的评论" onclick="commentManager.renderComments(0,50,4002103);">@</a>
+unmi.cc<br>嗯嗯，能用jdk自带就用自带的。<br><br>DateTimeFormatter  不可改变并且线程安全，官方也推荐
+</div>
+        <div class="comment_vote">
+            <span class="comment_error" style="color: red"></span>
+            <a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(4002775, &#39;Digg&#39;, this.parentElement, false);">
+                支持(0)
+            </a>
+            <a href="javascript:void(0);" class="comment_burry" onclick="return voteComment(4002775, &#39;Bury&#39;, this.parentElement, false);">
+                反对(0)
+            </a>
+        </div>
+        <span id="comment_4002775_avatar" style="display:none">
+            https://pic.cnblogs.com/face/860214/20180421160904.png
+        </span>
+
+			</div>
+		</div>
+
+<div id="comment_pager_bottom">
+    
+</div>
+
+
+</div>
+<script>
+    var commentManager = new blogCommentManager();
+    commentManager.renderComments(0);
+</script>
+
+<div id="comment_form" class="commentform">
+    <a name="commentform"></a>
+    <div id="divCommentShow"></div>
+    <div id="comment_nav"><span id="span_refresh_tips"></span><a href="javascript:void(0);" onclick="return RefreshCommentList();" id="lnk_RefreshComments" runat="server" clientidmode="Static">刷新评论</a><a href="https://www.cnblogs.com/zhisheng/p/9206758.html#" onclick="return RefreshPage();">刷新页面</a><a href="https://www.cnblogs.com/zhisheng/p/9206758.html#top">返回顶部</a></div>
+    <div id="comment_form_container"><div class="login_tips">
+    注册用户登录后才能发表评论，请 
+    <a rel="nofollow" href="javascript:void(0);" class="underline" onclick="return login(&#39;commentform&#39;);">登录</a>
+     或 
+    <a rel="nofollow" href="javascript:void(0);" class="underline" onclick="return register();">注册</a>，
+    <a href="https://www.cnblogs.com/">访问</a> 网站首页。
+</div></div>
+    <div class="ad_text_commentbox" id="ad_text_under_commentbox"></div>
+    <div id="ad_t2"><a href="http://www.ucancode.com/index.htm" target="_blank" onclick="ga(&#39;send&#39;, &#39;event&#39;, &#39;Link&#39;, &#39;click&#39;, &#39;T2-工控&#39;)">【推荐】超50万行VC++源码: 大型组态工控、电力仿真CAD与GIS源码库</a><br><a href="https://cloud.tencent.com/act/seckill?fromSource=gwzcw.3168381.3168381.3168381&amp;utm_medium=cpc&amp;utm_id=gwzcw.3168381.3168381.3168381" target="_blank" onclick="ga(&#39;send&#39;, &#39;event&#39;, &#39;Link&#39;, &#39;click&#39;, &#39;T2-腾讯云&#39;)">【推荐】腾讯云热门云产品限时秒杀，爆款1核2G云服务器99元/年！</a><br><a href="http://click.aliyun.com/m/1000081987/" target="_blank" onclick="ga(&#39;send&#39;, &#39;event&#39;, &#39;Link&#39;, &#39;click&#39;, &#39;T2-阿里云&#39;)">【推荐】阿里云双11返场来袭，热门产品低至一折等你来抢！</a><br><a href="https://www.jdcloud.com/cn/activity/year-end?utm_source=DMT_cnblogs&amp;utm_medium=CH&amp;utm_campaign=q4vm&amp;utm_term=Virtual-Machines" target="_blank" onclick="ga(&#39;send&#39;, &#39;event&#39;, &#39;Link&#39;, &#39;click&#39;, &#39;T2-京东云&#39;)">【活动】京东云服务器_云主机低于1折，低价高性能产品备战双11</a><br><a href="https://www.huodongxing.com/event/1521928757400" target="_blank" onclick="ga(&#39;send&#39;, &#39;event&#39;, &#39;Link&#39;, &#39;click&#39;, &#39;T2-七牛云&#39;)">【活动】ECUG For Future 技术者的年度盛会（杭州，1月4-5日）</a><br></div>
+    <div id="opt_under_post"></div>
+    <script async="async" src="./SimpleDateFormat 如何安全的使用？ - zhisheng_tian - 博客园_files/gpt.js"></script>
+    <script>
+        var googletag = googletag || {};
+        googletag.cmd = googletag.cmd || [];
+    </script>
+    <script>
+        googletag.cmd.push(function () {
+            googletag.defineSlot("/1090369/C1", [300, 250], "div-gpt-ad-1546353474406-0").addService(googletag.pubads());
+            googletag.defineSlot("/1090369/C2", [468, 60], "div-gpt-ad-1539008685004-0").addService(googletag.pubads());
+            googletag.pubads().enableSingleRequest();
+            googletag.enableServices();
+        });
+    </script>
+    <div id="cnblogs_c1" class="c_ad_block">
+        <div id="div-gpt-ad-1546353474406-0" style="height:250px; width:300px;"></div>
+    </div>
+    <div id="under_post_news"></div>
+    <div id="cnblogs_c2" class="c_ad_block">
+        <div id="div-gpt-ad-1539008685004-0" style="height:60px; width:468px;">
+            <script>
+                if (new Date() >= new Date(2018, 9, 13)) {
+                    googletag.cmd.push(function () { googletag.display("div-gpt-ad-1539008685004-0"); });
+                }
+            </script>
+        </div>
+    </div>
+    <div id="under_post_kb">
+<div class="itnews c_ad_block">
+    <b>最新 IT 新闻</b>:
+    <br>
+ ·              <a href="https://news.cnblogs.com/n/652430/" target="_blank">Intel 10nm++依然残血！这频率 没法看</a>
+            <br>
+ ·              <a href="https://news.cnblogs.com/n/652429/" target="_blank">Avast 扩展在 Chrome 和 Firefox 中恢复可用</a>
+            <br>
+ ·              <a href="https://news.cnblogs.com/n/652428/" target="_blank">国内首家！360加入 Ecma 参与 JavaScript 语言标准制定</a>
+            <br>
+ ·              <a href="https://news.cnblogs.com/n/652415/" target="_blank">100亿！又一半导体公司科创板上市！</a>
+            <br>
+ ·              <a href="https://news.cnblogs.com/n/652427/" target="_blank">农业技术服务商「慧云信息」完成B轮融资，投资方为数字广西集团</a>
+            <br>
+    » <a href="https://news.cnblogs.com/" title="IT 新闻" target="_blank">更多新闻...</a>
+</div></div>
+    <div id="HistoryToday" class="c_ad_block"></div>
+    <script type="text/javascript">
+        fixPostBody();
+        setTimeout(function () { incrementViewCount(cb_entryId); }, 50);
+        deliverAdT2();
+        deliverAdC1();
+        deliverAdC2();
+        loadNewsAndKb();
+        loadBlogSignature();
+LoadPostCategoriesTags(cb_blogId, cb_entryId);        LoadPostInfoBlock(cb_blogId, cb_entryId, cb_blogApp, cb_blogUserGuid);
+        GetPrevNextPost(cb_entryId, cb_blogId, cb_entryCreatedDate, cb_postType);
+        loadOptUnderPost();
+        GetHistoryToday(cb_blogId, cb_blogApp, cb_entryCreatedDate);
+    </script>
+</div>
+	</div><!--end: forFlow -->
+	</div><!--end: mainContent 主体内容容器-->
+
+	<div id="sideBar">
+		<div id="sideBarMain">
+			
+<div id="sidebar_news" class="newsItem"><!--done-->
+<h3 class="catListTitle">公告</h3>
+
+<div id="blog-news">
+    
+    <div id="profile_block">
+        昵称：
+        <a href="https://home.cnblogs.com/u/zhisheng/">
+            zhisheng_tian
+        </a>
+        <br>
+        园龄：
+        <a href="https://home.cnblogs.com/u/zhisheng/" title="入园时间：2015-12-18">
+            4年
+        </a>
+        <br>
+        粉丝：
+        <a href="https://home.cnblogs.com/u/zhisheng/followers/">
+            22
+        </a>
+        <br>
+        关注：
+        <a href="https://home.cnblogs.com/u/zhisheng/followees/">
+            0
+        </a>
+        <div id="p_b_follow">
+<a href="javascript:void(0)" onclick="follow(&#39;a997b3d9-52a5-e511-9fc1-ac853d9f53cc&#39;)">+加关注</a></div>
+        <script>getFollowStatus('a997b3d9-52a5-e511-9fc1-ac853d9f53cc');</script>
+    </div>
+</div>
+
+</div>
+
+			<div id="blog-calendar" style="">
+
+<table id="blogCalendar" class="Cal" cellspacing="0" cellpadding="0" title="Calendar" border="0">
+    <tbody>
+        <tr>
+            <td colspan="7">
+                <table class="CalTitle" cellspacing="0" border="0">
+                    <tbody>
+                        <tr>
+                            <td class="CalNextPrev">
+                                <a href="javascript:void(0);" onclick="loadBlogCalendar(&#39;2019/11/24&#39;); return false;">&lt;</a>
+                            </td>
+                            <td align="center">2019年12月</td>
+                            <td align="right" class="CalNextPrev">
+                                <a href="javascript:void(0);" onclick="loadBlogCalendar(&#39;2020/01/24&#39;); return false;">&gt;</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+        <tr>
+                    <th class="CalDayHeader" align="center" abbr="日" scope="col">日</th>
+                    <th class="CalDayHeader" align="center" abbr="一" scope="col">一</th>
+                    <th class="CalDayHeader" align="center" abbr="二" scope="col">二</th>
+                    <th class="CalDayHeader" align="center" abbr="三" scope="col">三</th>
+                    <th class="CalDayHeader" align="center" abbr="四" scope="col">四</th>
+                    <th class="CalDayHeader" align="center" abbr="五" scope="col">五</th>
+                    <th class="CalDayHeader" align="center" abbr="六" scope="col">六</th>
+        </tr>
+            <tr>
+                        <td class="CalWeekendDay" align="center">
+                            1
+                        </td>
+                        <td class="" align="center">
+                            2
+                        </td>
+                        <td class="" align="center">
+                            3
+                        </td>
+                        <td class="" align="center">
+                            4
+                        </td>
+                        <td class="" align="center">
+                            5
+                        </td>
+                        <td class="" align="center">
+                            6
+                        </td>
+                    <td class="CalWeekendDay" align="center">
+                        7
+                    </td>
+            </tr>
+                <tr>
+                        <td class="CalWeekendDay" align="center">
+                            8
+                        </td>
+                            <td class="" align="center">
+                                9
+                            </td>
+                            <td class="" align="center">
+                                10
+                            </td>
+                            <td class="" align="center">
+                                11
+                            </td>
+                            <td class="" align="center">
+                                12
+                            </td>
+                            <td class="" align="center">
+                                13
+                            </td>
+                        <td class="CalWeekendDay" align="center">
+                            14
+                        </td>
+                </tr>
+                <tr>
+                        <td class="CalWeekendDay" align="center">
+                            15
+                        </td>
+                            <td class="" align="center">
+                                16
+                            </td>
+                            <td class="" align="center">
+                                17
+                            </td>
+                            <td class="" align="center">
+                                18
+                            </td>
+                            <td class="" align="center">
+                                19
+                            </td>
+                            <td class="" align="center">
+                                20
+                            </td>
+                        <td class="CalWeekendDay" align="center">
+                            21
+                        </td>
+                </tr>
+                <tr>
+                        <td class="CalWeekendDay" align="center">
+                            22
+                        </td>
+                            <td class="" align="center">
+                                23
+                            </td>
+                            <td class="CalTodayDay" align="center">
+                                24
+                            </td>
+                            <td class="" align="center">
+                                25
+                            </td>
+                            <td class="" align="center">
+                                26
+                            </td>
+                            <td class="" align="center">
+                                27
+                            </td>
+                        <td class="CalWeekendDay" align="center">
+                            28
+                        </td>
+                </tr>
+                <tr>
+                        <td class="CalWeekendDay" align="center">
+                            29
+                        </td>
+                            <td class="" align="center">
+                                30
+                            </td>
+                            <td class="" align="center">
+                                31
+                            </td>
+                            <td class="CalOtherMonthDay" align="center">
+                                1
+                            </td>
+                            <td class="CalOtherMonthDay" align="center">
+                                2
+                            </td>
+                            <td class="CalOtherMonthDay" align="center">
+                                3
+                            </td>
+                        <td class="CalOtherMonthDay" align="center">
+                            4
+                        </td>
+                </tr>
+                <tr>
+                        <td class="CalOtherMonthDay" align="center">
+                            5
+                        </td>
+                            <td class="CalOtherMonthDay" align="center">
+                                6
+                            </td>
+                            <td class="CalOtherMonthDay" align="center">
+                                7
+                            </td>
+                            <td class="CalOtherMonthDay" align="center">
+                                8
+                            </td>
+                            <td class="CalOtherMonthDay" align="center">
+                                9
+                            </td>
+                            <td class="CalOtherMonthDay" align="center">
+                                10
+                            </td>
+                        <td class="CalOtherMonthDay" align="center">
+                            11
+                        </td>
+                </tr>
+    </tbody>
+</table></div><script>loadBlogDefaultCalendar();</script>
+			
+			<div id="leftcontentcontainer">
+				<div id="blog-sidecolumn">
+<!-- 搜索 -->
+<div id="sidebar_search" class="sidebar-block">
+    <div id="sidebar_search" class="mySearch">
+        <h3 class="catListTitle">搜索</h3>
+        <div id="sidebar_search_box">
+            <div id="widget_my_zzk" class="div_my_zzk">
+                <input type="text" id="q" onkeydown="return zzk_go_enter(event);" class="input_my_zzk">&nbsp;<input onclick="zzk_go()" type="button" value="找找看" id="btnZzk" class="btn_my_zzk">
+            </div>
+            <div id="widget_my_google" class="div_my_zzk">
+                <input type="text" name="google_q" id="google_q" onkeydown="return google_go_enter(event);" class="input_my_zzk">&nbsp;<input onclick="google_go()" type="button" value="谷歌搜索" class="btn_my_zzk">
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 常用链接 -->
+<div id="sidebar_shortcut" class="sidebar-block">
+    <div class="catListLink">
+<h3 class="catListTitle">
+常用链接
+</h3>
+<ul>
+		<li>
+
+<a href="https://www.cnblogs.com/zhisheng/p/" title="我的博客的随笔列表">我的随笔</a>
+</li>
+		<li>
+
+<a href="https://www.cnblogs.com/zhisheng/MyComments.html" title="我的发表过的评论列表">我的评论</a>
+</li>
+		<li>
+
+<a href="https://www.cnblogs.com/zhisheng/OtherPosts.html" title="我评论过的随笔列表">我的参与</a>
+</li>
+		<li>
+
+<a href="https://www.cnblogs.com/zhisheng/RecentComments.html" title="我的博客的评论列表">最新评论</a>
+</li>
+		<li>
+
+<a href="https://www.cnblogs.com/zhisheng/tag/" title="我的博客的标签列表">我的标签</a>
+</li>
+
+</ul>
+<div id="itemListLin_con" style="display:none;">
+<ul>
+
+</ul>
+</div>
+</div>
+
+
+</div>
+
+<!-- 最新随笔 -->
+
+
+
+<!-- 我的标签 -->
+<div id="sidebar_toptags" class="sidebar-block">
+    <div class="catListTag">
+<h3 class="catListTitle">我的标签</h3>
+<ul>
+
+        <li>
+            <a href="https://www.cnblogs.com/zhisheng/tag/Flink/">Flink</a>(31)
+        </li>
+        <li>
+            <a href="https://www.cnblogs.com/zhisheng/tag/%E5%A4%A7%E6%95%B0%E6%8D%AE/">大数据</a>(30)
+        </li>
+        <li>
+            <a href="https://www.cnblogs.com/zhisheng/tag/java/">java</a>(8)
+        </li>
+
+</ul>
+</div>
+
+
+</div>
+
+<!-- 积分与排名 -->
+
+
+<!-- 随笔分类、随笔档案、文章分类、新闻分类、相册、链接 -->
+<div id="sidebar_categories">
+    
+        <div id="sidebar_postarchive" class="catListPostArchive sidebar-block">
+            <h3 class="catListTitle">
+                
+
+随笔档案
+
+
+
+            </h3>
+
+
+            <ul>
+
+                        <li>
+                            
+<a href="https://www.cnblogs.com/zhisheng/archive/2019/11.html" rel="" target="">
+    2019年11月(4)
+</a>
+ 
+
+                        </li>
+                        <li>
+                            
+<a href="https://www.cnblogs.com/zhisheng/archive/2019/10.html" rel="" target="">
+    2019年10月(2)
+</a>
+ 
+
+                        </li>
+                        <li>
+                            
+<a href="https://www.cnblogs.com/zhisheng/archive/2019/09.html" rel="" target="">
+    2019年9月(6)
+</a>
+ 
+
+                        </li>
+                        <li>
+                            
+<a href="https://www.cnblogs.com/zhisheng/archive/2019/08.html" rel="" target="">
+    2019年8月(15)
+</a>
+ 
+
+                        </li>
+                        <li>
+                            
+<a href="https://www.cnblogs.com/zhisheng/archive/2019/07.html" rel="" target="">
+    2019年7月(2)
+</a>
+ 
+
+                        </li>
+                        <li>
+                            
+<a href="https://www.cnblogs.com/zhisheng/archive/2019/04.html" rel="" target="">
+    2019年4月(2)
+</a>
+ 
+
+                        </li>
+                        <li>
+                            
+<a href="https://www.cnblogs.com/zhisheng/archive/2019/01.html" rel="" target="">
+    2019年1月(6)
+</a>
+ 
+
+                        </li>
+                        <li>
+                            
+<a href="https://www.cnblogs.com/zhisheng/archive/2018/12.html" rel="" target="">
+    2018年12月(8)
+</a>
+ 
+
+                        </li>
+                        <li>
+                            
+<a href="https://www.cnblogs.com/zhisheng/archive/2018/08.html" rel="" target="">
+    2018年8月(8)
+</a>
+ 
+
+                        </li>
+                        <li>
+                            
+<a href="https://www.cnblogs.com/zhisheng/archive/2018/06.html" rel="" target="">
+    2018年6月(2)
+</a>
+ 
+
+                        </li>
+                        <li>
+                            
+<a href="https://www.cnblogs.com/zhisheng/archive/2018/05.html" rel="" target="">
+    2018年5月(1)
+</a>
+ 
+
+                        </li>
+                        <li>
+                            
+<a href="https://www.cnblogs.com/zhisheng/archive/2018/04.html" rel="" target="">
+    2018年4月(2)
+</a>
+ 
+
+                        </li>
+
+            </ul>
+
+
+        </div>
+
+</div>
+
+<!-- 最新评论 -->
+<div id="sidebar_recentcomments" class="sidebar-block">
+    <div class="catListComment">
+<h3 class="catListTitle">最新评论</h3>
+
+	<div class="RecentCommentBlock">
+        <ul>
+                    <li class="recent_comment_title"><a href="https://www.cnblogs.com/zhisheng/p/8982845.html#4299273">1. Re:Spring Boot 2.0系列文章(七)：SpringApplication 深入探索</a></li>
+                    <li class="recent_comment_body">很详细</li>
+                    <li class="recent_comment_author">--云端观云</li>
+                    <li class="recent_comment_title"><a href="https://www.cnblogs.com/zhisheng/p/10055449.html#4133877">2. Re:《从0到1学习Flink》—— 如何自定义 Data Sink ？</a></li>
+                    <li class="recent_comment_body">支持支持</li>
+                    <li class="recent_comment_author">--牛腩</li>
+                    <li class="recent_comment_title"><a href="http://www.cnblogs.com/zhisheng/p/9206758.html#4002775">3. Re:SimpleDateFormat 如何安全的使用？</a></li>
+                    <li class="recent_comment_body">@ unmi.cc嗯嗯，能用jdk自带就用自带的。DateTimeFormatter 不可改变并且线程安全，官方也推荐...</li>
+                    <li class="recent_comment_author">--zhisheng_tian</li>
+                    <li class="recent_comment_title"><a href="http://www.cnblogs.com/zhisheng/p/9206758.html#4002103">4. Re:SimpleDateFormat 如何安全的使用？</a></li>
+                    <li class="recent_comment_body">Java 8 了，就必须用 DateTimeFormatter</li>
+                    <li class="recent_comment_author">--unmi.cc</li>
+                    <li class="recent_comment_title"><a href="http://www.cnblogs.com/zhisheng/p/8982845.html#3966207">5. Re:Spring Boot 2.0系列文章(七)：SpringApplication 深入探索</a></li>
+                    <li class="recent_comment_body">不错的文章！</li>
+                    <li class="recent_comment_author">--罗里罗嗦夫斯基</li>
+        </ul>
+    </div>
+</div>
+
+
+</div>
+
+
+
+<!-- 阅读排行榜 -->
+<div id="sidebar_topviewedposts" class="sidebar-block">
+    <div class="catListView">
+<h3 class="catListTitle">阅读排行榜</h3>
+	<div id="TopViewPostsBlock">
+        <ul style="word-break:break-all">
+                    <li>
+                        <a href="https://www.cnblogs.com/zhisheng/p/8982845.html">
+                            1. Spring Boot 2.0系列文章(七)：SpringApplication 深入探索(2743)
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://www.cnblogs.com/zhisheng/p/8947996.html">
+                            2. 分布式锁看这篇就够了(2289)
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://www.cnblogs.com/zhisheng/p/9446043.html">
+                            3. 渣渣菜鸡的有赞面试经历（一）(1067)
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://www.cnblogs.com/zhisheng/p/10326692.html">
+                            4. 《从0到1学习Flink》—— Flink 写入数据到 ElasticSearch(968)
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://www.cnblogs.com/zhisheng/p/9206758.html">
+                            5. SimpleDateFormat 如何安全的使用？(957)
+                        </a>
+                    </li>
+        </ul>
+    </div>
+</div>
+
+
+</div>
+
+<!-- 评论排行榜 -->
+<div id="sidebar_topcommentedposts" class="sidebar-block">
+    <div class="catListFeedback">
+<h3 class="catListTitle">评论排行榜</h3>
+	<div id="TopFeedbackPostsBlock">
+        <ul style="word-break:break-all">
+                    <li>
+                        <a href="https://www.cnblogs.com/zhisheng/p/8982845.html">
+                            1. Spring Boot 2.0系列文章(七)：SpringApplication 深入探索(2)
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://www.cnblogs.com/zhisheng/p/9206758.html">
+                            2. SimpleDateFormat 如何安全的使用？(2)
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://www.cnblogs.com/zhisheng/p/10055449.html">
+                            3. 《从0到1学习Flink》—— 如何自定义 Data Sink ？(1)
+                        </a>
+                    </li>
+        </ul>
+    </div>
+</div>
+
+
+</div>
+
+<!-- 推荐排行榜 -->
+<div id="sidebar_topdiggedposts" class="sidebar-block">
+    
+<div id="topdigg_posts_wrap">
+    <div class="catListView">
+        <h3 class="catListTitle">推荐排行榜</h3>
+        <div id="TopDiggPostsBlock">
+            <ul style="word-break: break-all">
+                        <li>
+                            <a href="https://www.cnblogs.com/zhisheng/p/11332529.html">
+                                1. 你公司到底需不需要引入实时计算引擎？(10)
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://www.cnblogs.com/zhisheng/p/8947996.html">
+                                2. 分布式锁看这篇就够了(6)
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://www.cnblogs.com/zhisheng/p/8982845.html">
+                                3. Spring Boot 2.0系列文章(七)：SpringApplication 深入探索(3)
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://www.cnblogs.com/zhisheng/p/9206778.html">
+                                4. 20 个案例教你在 Java 8 中如何处理日期和时间?(1)
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://www.cnblogs.com/zhisheng/p/10672709.html">
+                                5. 《Flink 源码解析》—— 源码编译运行(1)
+                            </a>
+                        </li>
+            </ul>
+        </div>
+    </div>
+</div>
+</div></div>
+                    <script>loadBlogSideColumn();</script>
+			</div>
+			
+		</div><!--end: sideBarMain -->
+	</div><!--end: sideBar 侧边栏容器 -->
+	<div class="clear"></div>
+	</div><!--end: main -->
+	<div class="clear"></div>
+	<div id="footer">
+		<!--done-->
+Copyright © 2019 zhisheng_tian
+<br><span id="poweredby">Powered by .NET Core 3.1.0 on Linux</span>
+
+
+
+	</div><!--end: footer -->
+</div><!--end: home 自定义的最大容器 -->
+
+
+    
+
+</body></html>
