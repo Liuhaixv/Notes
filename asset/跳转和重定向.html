@@ -1,0 +1,945 @@
+<!DOCTYPE html>
+<!-- saved from url=(0044)https://www.cnblogs.com/houji/p/5198601.html -->
+<html lang="zh-cn"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="referrer" content="origin">
+    <meta property="og:description" content="比喻： 请求转发：A向B发送请求，想让B帮忙完成一项工作，当B接收到请求后发现自己完成不了，于是B请C帮忙，C接收到B的请求后最终完成了该项工作，并把最后的结果返回给A。此过程A只发送了一次请求给B，">
+    <meta http-equiv="Cache-Control" content="no-transform">
+    <meta http-equiv="Cache-Control" content="no-siteapp">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>内部跳转(请求转发)和外部跳转(重定向)的区别? - 厚积！！ - 博客园</title>
+    
+    <link rel="stylesheet" href="./未命名_files/blog-common.min.css">
+    <link id="MainCss" rel="stylesheet" href="./未命名_files/bundle-book-2.min.css">
+    
+    <link id="mobile-style" media="only screen and (max-width: 767px)" type="text/css" rel="stylesheet" href="./未命名_files/bundle-book-mobile.min.css">
+    
+    <link type="application/rss+xml" rel="alternate" href="https://www.cnblogs.com/houji/rss">
+    <link type="application/rsd+xml" rel="EditURI" href="https://www.cnblogs.com/houji/rsd.xml">
+    <link type="application/wlwmanifest+xml" rel="wlwmanifest" href="https://www.cnblogs.com/houji/wlwmanifest.xml">
+    <script async="" src="./未命名_files/analytics.js"></script><script src="./未命名_files/jquery-2.2.0.min.js"></script>
+    <script src="./未命名_files/blog-common.min.js"></script>
+    <script>
+        var currentBlogId = 265269;
+        var currentBlogApp = 'houji';
+        var cb_enable_mathjax = false;
+        var isLogined = false;
+    </script>
+    
+    
+    
+</head>
+<body>
+    <a name="top"></a>
+    
+    <script type="text/javascript">
+	try {
+		if (screen.availWidth > 1200) {
+			document.getElementById("MainCss").href = '/skins/book/bundle-book-2.min.css';
+		}
+	} catch (e) { }
+</script>
+
+<div id="header">
+<div id="HeaderTitle">
+<div id="Title">
+<a id="Header1_HeaderTitle" class="headermaintitle HeaderMainTitle" href="https://www.cnblogs.com/houji/">厚积！！</a>
+
+</div>
+<div id="subTitle">
+
+</div>
+</div>
+</div>
+
+
+<div id="main">
+	<div id="post_detail">
+    <div class="post">
+        <h2>
+            
+<a id="cb_post_title_url" class="postTitle2" href="https://www.cnblogs.com/houji/p/5198601.html">内部跳转(请求转发)和外部跳转(重定向)的区别?</a>
+
+        </h2>
+        
+<div id="cnblogs_post_body" class="blogpost-body ">
+    <div id="sina_keyword_ad_area2" class="articalContent   newfont_family"><strong>比喻：</strong>
+<div><strong>请求转发</strong>：A向B发送请求，想让B帮忙完成一项工作，当B接收到请求后发现自己完成不了，于是B请C帮忙，C接收到B的请求后最终完成了该项工作，并把最后的结果返回给A。此过程A只发送了一次请求给B，A只知道把请求发给B，至于B是怎么完成的A并不关心，他只等待最终的结果。</div>
+<div><strong>重定向</strong>：A向B发送请求，想让B帮忙完成一项工作，当B接收到请求后发现自己无法完成，就立即告诉A情况，并向A推荐C可以完成该项工作，于是A就找C帮忙，C最终完成该项工作，返回给A。</div>
+<div>&nbsp;</div>
+<div><strong>不同点：</strong></div>
+<div>1、浏览器地址栏显示不同（<strong>表面区别</strong>）： &nbsp;</div>
+<div>&nbsp;无论进行多少次请求，如果使用请求转发来实现，浏览器地址栏中只显示第一次发送请求的地址；</div>
+<div>如果使用重定向来实现，浏览器地址栏显示的是每次请求的新地址。这只是表面上看到的不同地方。&nbsp;</div>
+<div>&nbsp;</div>
+<div>2、组件之间可否共享信息不同（<strong>本质区别</strong>） &nbsp;</div>
+<div>&nbsp;从本质上讲，请求转发时，从发送第一次到最后一次请求的过程中，WEB容器只创建一次request和response对象，请求之间始终共享这两个对象，所以每个请求可以访问他之前请求中的参数和属性的值；</div>
+<div>而重定向时，浏览器每发送一次请求，WEB容器都会重新创建新的request和response对象，所以请求之间不能共享信息，即不能在请求中访问到他之前请求中的参数和属性的值。 &nbsp;</div>
+<div>&nbsp;</div>
+<div>3、实现方式不同：</div>
+<div>3.1 请求转发的实现步骤：</div>
+<div>1）说明将要转发的资源；&nbsp;</div>
+<div>2)获取请求转发的对象；&nbsp;</div>
+<div>3) 调用请求转发对象中forward（）方法</div>
+<div>&nbsp; Java代码&nbsp;</div>
+<div>&nbsp; 1). String forward = "/a.jsp";&nbsp;</div>
+<div>&nbsp; 2). RequestDispatcher rd = request.getRequestDispatcher(forward);</div>
+<div>&nbsp;3). rd.forward(request, reponse);&nbsp;</div>
+<div>综合：request.getRequestDispatcher("/a.jsp").forward(request,response);</div>
+<div>&nbsp;</div>
+<div>&nbsp;</div>
+<div>3.2 &nbsp;重定向的实现步骤：&nbsp;</div>
+<div>&nbsp; 1) 说明将要重定向的资源；&nbsp;</div>
+<div>&nbsp;2) 调用response对象中sendRedirect方法&nbsp;</div>
+<div>&nbsp; Java代码&nbsp;</div>
+<div>&nbsp; 1. String resource = request.geContextPath() + "/a.jsp";&nbsp;</div>
+<div>&nbsp; 2. response.sendRedirect(resource);</div>
+<div>综合：response.sendRediect(request.geContextPath() + "/a.jsp");</div>
+<div>&nbsp;</div>
+<div>&nbsp;4、知情人不同&nbsp;</div>
+<div>&nbsp;请求转发的过程只有WEB服务器知道，而浏览器不知道进行了多少次转发，以及都转发给哪些组件（servlet，JSP），它只是在等待WEB服务器最终的结果。</div>
+<div>而重定向时，每发送一次请求，WEB服务器都会通知浏览器的，所以重定向了几次请求以及每次都向哪个组件发送的请求，浏览器很清楚，当让WEB服务器也很明白。&nbsp;</div>
+<div>&nbsp;</div>
+<div>&nbsp;</div>
+<div><strong>相同点</strong>： 两者都可以进行多次请求的转发。</div>
+<div>&nbsp;</div>
+<div><strong>&nbsp;</strong></div>
+<div><strong>总结：什么情况下使用重定向，什么情况下请求转发，这个不是看我们的习惯，而是什么情况下必须用什么：</strong></div>
+<div><strong>重定向：之前的request中存放的变量全部失效并进入一个新session的作用域；</strong></div>
+<div><strong>请求转发：之前的request中存放的变量没有失效，就想把两个页面拼在一起</strong></div>
+</div>
+</div>
+<div id="MySignature"></div>
+<div class="clear"></div>
+<div id="blog_post_info_block"><div id="BlogPostCategory">
+    分类: 
+            <a href="https://www.cnblogs.com/houji/category/783903.html" target="_blank">java</a></div>
+<div id="EntryTag">
+    标签: 
+            <a href="https://www.cnblogs.com/houji/tag/web/">web</a>,             <a href="https://www.cnblogs.com/houji/tag/jsp/">jsp</a></div>
+
+    <div id="blog_post_info">
+<div id="green_channel">
+        <a href="javascript:void(0);" id="green_channel_digg" onclick="DiggIt(5198601,cb_blogId,1);green_channel_success(this,&#39;谢谢推荐！&#39;);">好文要顶</a>
+        <a id="green_channel_follow" onclick="follow(&#39;a5e054ba-a8c0-e511-9fc1-ac853d9f53cc&#39;);" href="javascript:void(0);">关注我</a>
+    <a id="green_channel_favorite" onclick="AddToWz(cb_entryId);return false;" href="javascript:void(0);">收藏该文</a>
+    <a id="green_channel_weibo" href="javascript:void(0);" title="分享至新浪微博" onclick="ShareToTsina()"><img src="./未命名_files/icon_weibo_24.png" alt=""></a>
+    <a id="green_channel_wechat" href="javascript:void(0);" title="分享至微信" onclick="shareOnWechat()"><img src="./未命名_files/wechat.png" alt=""></a>
+</div>
+<div id="author_profile">
+    <div id="author_profile_info" class="author_profile_info">
+            <a href="https://home.cnblogs.com/u/houji/" target="_blank"><img src="./未命名_files/20160126173021.png" class="author_avatar" alt=""></a>
+        <div id="author_profile_detail" class="author_profile_info">
+            <a href="https://home.cnblogs.com/u/houji/">厚积！！</a><br>
+            <a href="https://home.cnblogs.com/u/houji/followees/">关注 - 2</a><br>
+            <a href="https://home.cnblogs.com/u/houji/followers/">粉丝 - 6</a>
+        </div>
+    </div>
+    <div class="clear"></div>
+    <div id="author_profile_honor"></div>
+    <div id="author_profile_follow">
+                <a href="javascript:void(0);" onclick="follow(&#39;a5e054ba-a8c0-e511-9fc1-ac853d9f53cc&#39;);return false;">+加关注</a>
+    </div>
+</div>
+<div id="div_digg">
+    <div class="diggit" onclick="votePost(5198601,&#39;Digg&#39;)">
+        <span class="diggnum" id="digg_count">0</span>
+    </div>
+    <div class="buryit" onclick="votePost(5198601,&#39;Bury&#39;)">
+        <span class="burynum" id="bury_count">0</span>
+    </div>
+    <div class="clear"></div>
+    <div class="diggword" id="digg_tips">
+    </div>
+</div>
+
+<script type="text/javascript">
+    currentDiggType = 0;
+</script></div>
+    <div class="clear"></div>
+    <div id="post_next_prev">
+
+    <a href="https://www.cnblogs.com/houji/p/5192968.html" class="p_n_p_prefix">« </a> 上一篇：    <a href="https://www.cnblogs.com/houji/p/5192968.html" title="发布于 2016-02-16 15:48">常用的JS页面跳转代码调用大全</a>
+    <br>
+    <a href="https://www.cnblogs.com/houji/p/5200346.html" class="p_n_p_prefix">» </a> 下一篇：    <a href="https://www.cnblogs.com/houji/p/5200346.html" title="发布于 2016-02-19 11:20">五种JSP页面跳转方法详解</a>
+
+</div>
+</div>
+        <p class="postfoot">
+            posted on 
+<span id="post-date">2016-02-18 16:30</span>&nbsp;
+<a href="https://www.cnblogs.com/houji/">厚积！！</a>&nbsp;
+阅读(<span id="post_view_count">609</span>)&nbsp;
+评论(<span id="post_comment_count">0</span>)&nbsp;
+<a href="https://i.cnblogs.com/EditPosts.aspx?postid=5198601" rel="nofollow">编辑</a>&nbsp;
+<a href="javascript:void(0)" onclick="AddToWz(5198601);return false;">收藏</a>
+        </p>
+    </div>
+</div>
+
+
+<script src="./未命名_files/highlight.min.js"></script>
+<script>markdown_highlight();</script>
+<script>
+    var allowComments = true, cb_blogId = 265269, cb_blogApp = 'houji', cb_blogUserGuid = 'a5e054ba-a8c0-e511-9fc1-ac853d9f53cc';
+    var cb_entryId = 5198601, cb_entryCreatedDate = '2016-02-18 16:30', cb_postType = 1; 
+    loadViewCount(cb_entryId);
+</script><a name="!comments"></a>
+<div id="blog-comments-placeholder"></div>
+<script>
+    var commentManager = new blogCommentManager();
+    commentManager.renderComments(0);
+</script>
+
+<div id="comment_form" class="commentform">
+    <a name="commentform"></a>
+    <div id="divCommentShow"></div>
+    <div id="comment_nav"><span id="span_refresh_tips"></span><a href="javascript:void(0);" onclick="return RefreshCommentList();" id="lnk_RefreshComments" runat="server" clientidmode="Static">刷新评论</a><a href="https://www.cnblogs.com/houji/p/5198601.html#" onclick="return RefreshPage();">刷新页面</a><a href="https://www.cnblogs.com/houji/p/5198601.html#top">返回顶部</a></div>
+    <div id="comment_form_container"><div class="login_tips">
+    注册用户登录后才能发表评论，请 
+    <a rel="nofollow" href="javascript:void(0);" class="underline" onclick="return login(&#39;commentform&#39;);">登录</a>
+     或 
+    <a rel="nofollow" href="javascript:void(0);" class="underline" onclick="return register();">注册</a>，
+    <a href="https://www.cnblogs.com/">访问</a> 网站首页。
+</div></div>
+    <div class="ad_text_commentbox" id="ad_text_under_commentbox"></div>
+    <div id="ad_t2"><a href="http://www.ucancode.com/index.htm" target="_blank" onclick="ga(&#39;send&#39;, &#39;event&#39;, &#39;Link&#39;, &#39;click&#39;, &#39;T2-ucancode&#39;)">【推荐】超50万行VC++源码: 大型组态工控、电力仿真CAD与GIS源码库</a><br><a href="http://click.aliyun.com/m/1000081987/" target="_blank" onclick="ga(&#39;send&#39;, &#39;event&#39;, &#39;Link&#39;, &#39;click&#39;, &#39;T2-阿里云&#39;)">【推荐】阿里云双11返场来袭，热门产品低至一折等你来抢！</a><br><a href="https://cloud.tencent.com/act/developer?fromSource=gwzcw.3196335.3196335.3196335&amp;utm_medium=cpc&amp;utm_id=gwzcw.3196335.3196335.3196335" target="_blank" onclick="ga(&#39;send&#39;, &#39;event&#39;, &#39;Link&#39;, &#39;click&#39;, &#39;T2-腾讯云&#39;)">【活动】开发者上云必备，腾讯云1核4G 2M云服务器11元/月起</a><br><a href="https://cloud.baidu.com/campaign/Promotion-20191111/index.html?track=cp:dsp|pf:pc|pp:chui-bokeyuan-huodong-19shuangshiyiganenji-BCC-cpaxingshi-191210|pu:cpa-xingshi|ci:2019syj|kw:2172212" target="_blank" onclick="ga(&#39;send&#39;, &#39;event&#39;, &#39;Link&#39;, &#39;click&#39;, &#39;T2-百度云&#39;)">【推荐】百度智能云岁末感恩季，明星产品低至1元新老用户畅享</a><br><a href="https://www.jdcloud.com/cn/activity/newUser?utm_source=DMT_cnblogs&amp;utm_medium=CH&amp;utm_campaign=09vm&amp;utm_term=Virtual-Machines" target="_blank" onclick="ga(&#39;send&#39;, &#39;event&#39;, &#39;Link&#39;, &#39;click&#39;, &#39;T2-京东云&#39;)">【活动】京东云限时优惠1.5折购云主机，最高返价值1000元礼品！</a><br><a href="https://developer.aliyun.com/ask/258515?utm_content=g_1000095381" target="_blank" onclick="ga(&#39;send&#39;, &#39;event&#39;, &#39;Link&#39;, &#39;click&#39;, &#39;T2-阿里云开发者社区-T2&#39;)">【推荐】大数据技术之flink百问，阿里云开发者社区一线收集、吐血整理</a><br><a href="https://developer.aliyun.com/article/739170?utm_content=g_1000095373" target="_blank" onclick="ga(&#39;send&#39;, &#39;event&#39;, &#39;Link&#39;, &#39;click&#39;, &#39;T2-阿里云开发者社区-T2&#39;)">【推荐】2019阿里系电子书合集来了！| 开发者社区年终礼包</a><br></div>
+    <div id="opt_under_post"></div>
+    <script async="async" src="https://www.googletagservices.com/tag/js/gpt.js"></script>
+    <script>
+        var googletag = googletag || {};
+        googletag.cmd = googletag.cmd || [];
+    </script>
+    <script>
+        googletag.cmd.push(function () {
+            googletag.defineSlot("/1090369/C1", [300, 250], "div-gpt-ad-1546353474406-0").addService(googletag.pubads());
+            googletag.defineSlot("/1090369/C2", [468, 60], "div-gpt-ad-1539008685004-0").addService(googletag.pubads());
+            googletag.pubads().enableSingleRequest();
+            googletag.enableServices();
+        });
+    </script>
+    <div id="cnblogs_c1" class="c_ad_block">
+        <div id="div-gpt-ad-1546353474406-0" style="height:250px; width:300px;"></div>
+    </div>
+    <div id="under_post_news"></div>
+    <div id="cnblogs_c2" class="c_ad_block">
+        <div id="div-gpt-ad-1539008685004-0" style="height:60px; width:468px;">
+            <script>
+                if (new Date() >= new Date(2018, 9, 13)) {
+                    googletag.cmd.push(function () { googletag.display("div-gpt-ad-1539008685004-0"); });
+                }
+            </script>
+        </div>
+    </div>
+    <div id="under_post_kb">
+<div class="itnews c_ad_block">
+    <b>最新 IT 新闻</b>:
+    <br>
+ ·              <a href="https://news.cnblogs.com/n/653569/" target="_blank">进军印度云服务市场 中国移动有意成立合资公司</a>
+            <br>
+ ·              <a href="https://news.cnblogs.com/n/653568/" target="_blank">洋码头宣布全年盈利并获D轮数亿元融资 新浪微博领投</a>
+            <br>
+ ·              <a href="https://news.cnblogs.com/n/653567/" target="_blank">数十亿张医学图像暴露在互联网，波及美国最大军事医院</a>
+            <br>
+ ·              <a href="https://news.cnblogs.com/n/653566/" target="_blank">世卫组织：中国已分享新型冠状病毒基因序列信息</a>
+            <br>
+ ·              <a href="https://news.cnblogs.com/n/653565/" target="_blank">中芯国际14nm获华为青睐：台积电遭遇新对手</a>
+            <br>
+    » <a href="https://news.cnblogs.com/" title="IT 新闻" target="_blank">更多新闻...</a>
+</div></div>
+    <div id="HistoryToday" class="c_ad_block"></div>
+    <script type="text/javascript">
+        fixPostBody();
+        setTimeout(function () { incrementViewCount(cb_entryId); }, 50);
+        deliverAdT2();
+        deliverAdC1();
+        deliverAdC2();
+        loadNewsAndKb();
+        loadBlogSignature();
+LoadPostCategoriesTags(cb_blogId, cb_entryId);        LoadPostInfoBlock(cb_blogId, cb_entryId, cb_blogApp, cb_blogUserGuid);
+        GetPrevNextPost(cb_entryId, cb_blogId, cb_entryCreatedDate, cb_postType);
+        loadOptUnderPost();
+        GetHistoryToday(cb_blogId, cb_blogApp, cb_entryCreatedDate);
+    </script>
+</div>
+
+	<p id="footer">
+	Powered by: 
+	<br>
+	
+	
+<a href="https://www.cnblogs.com/" id="Footer1_Hyperlink3" style="font-size: 12px; font-family: Verdana">博客园</a>
+	<br>
+	Copyright © 2020 厚积！！
+<br><span id="poweredby">Powered by .NET Core 3.1.0 on Linux</span>
+
+</p>
+
+
+</div>
+<div id="rightmenu">
+	
+		<div id="blog-calendar" style="">
+
+<table id="blogCalendar" class="Cal" cellspacing="0" cellpadding="0" title="Calendar" border="0">
+    <tbody>
+        <tr>
+            <td colspan="7">
+                <table class="CalTitle" cellspacing="0" border="0">
+                    <tbody>
+                        <tr>
+                            <td class="CalNextPrev">
+                                <a href="javascript:void(0);" onclick="loadBlogCalendar(&#39;2019/12/13&#39;); return false;">&lt;</a>
+                            </td>
+                            <td align="center">2020年1月</td>
+                            <td align="right" class="CalNextPrev">
+                                <a href="javascript:void(0);" onclick="loadBlogCalendar(&#39;2020/02/13&#39;); return false;">&gt;</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+        <tr>
+                    <th class="CalDayHeader" align="center" abbr="日" scope="col">日</th>
+                    <th class="CalDayHeader" align="center" abbr="一" scope="col">一</th>
+                    <th class="CalDayHeader" align="center" abbr="二" scope="col">二</th>
+                    <th class="CalDayHeader" align="center" abbr="三" scope="col">三</th>
+                    <th class="CalDayHeader" align="center" abbr="四" scope="col">四</th>
+                    <th class="CalDayHeader" align="center" abbr="五" scope="col">五</th>
+                    <th class="CalDayHeader" align="center" abbr="六" scope="col">六</th>
+        </tr>
+            <tr>
+                            <td class="CalOtherMonthDay" align="center">29</td>
+                            <td class="CalOtherMonthDay" align="center">30</td>
+                            <td class="CalOtherMonthDay" align="center">31</td>
+                        <td class="" align="center">
+                            1
+                        </td>
+                        <td class="" align="center">
+                            2
+                        </td>
+                        <td class="" align="center">
+                            3
+                        </td>
+                    <td class="CalWeekendDay" align="center">
+                        4
+                    </td>
+            </tr>
+                <tr>
+                        <td class="CalWeekendDay" align="center">
+                            5
+                        </td>
+                            <td class="" align="center">
+                                6
+                            </td>
+                            <td class="" align="center">
+                                7
+                            </td>
+                            <td class="" align="center">
+                                8
+                            </td>
+                            <td class="" align="center">
+                                9
+                            </td>
+                            <td class="" align="center">
+                                10
+                            </td>
+                        <td class="CalWeekendDay" align="center">
+                            11
+                        </td>
+                </tr>
+                <tr>
+                        <td class="CalWeekendDay" align="center">
+                            12
+                        </td>
+                            <td class="CalTodayDay" align="center">
+                                13
+                            </td>
+                            <td class="" align="center">
+                                14
+                            </td>
+                            <td class="" align="center">
+                                15
+                            </td>
+                            <td class="" align="center">
+                                16
+                            </td>
+                            <td class="" align="center">
+                                17
+                            </td>
+                        <td class="CalWeekendDay" align="center">
+                            18
+                        </td>
+                </tr>
+                <tr>
+                        <td class="CalWeekendDay" align="center">
+                            19
+                        </td>
+                            <td class="" align="center">
+                                20
+                            </td>
+                            <td class="" align="center">
+                                21
+                            </td>
+                            <td class="" align="center">
+                                22
+                            </td>
+                            <td class="" align="center">
+                                23
+                            </td>
+                            <td class="" align="center">
+                                24
+                            </td>
+                        <td class="CalWeekendDay" align="center">
+                            25
+                        </td>
+                </tr>
+                <tr>
+                        <td class="CalWeekendDay" align="center">
+                            26
+                        </td>
+                            <td class="" align="center">
+                                27
+                            </td>
+                            <td class="" align="center">
+                                28
+                            </td>
+                            <td class="" align="center">
+                                29
+                            </td>
+                            <td class="" align="center">
+                                30
+                            </td>
+                            <td class="" align="center">
+                                31
+                            </td>
+                        <td class="CalOtherMonthDay" align="center">
+                            1
+                        </td>
+                </tr>
+                <tr>
+                        <td class="CalOtherMonthDay" align="center">
+                            2
+                        </td>
+                            <td class="CalOtherMonthDay" align="center">
+                                3
+                            </td>
+                            <td class="CalOtherMonthDay" align="center">
+                                4
+                            </td>
+                            <td class="CalOtherMonthDay" align="center">
+                                5
+                            </td>
+                            <td class="CalOtherMonthDay" align="center">
+                                6
+                            </td>
+                            <td class="CalOtherMonthDay" align="center">
+                                7
+                            </td>
+                        <td class="CalOtherMonthDay" align="center">
+                            8
+                        </td>
+                </tr>
+    </tbody>
+</table></div><script>loadBlogDefaultCalendar();</script>
+		
+<h3>导航</h3>
+<ul>
+			<li><a id="blog_nav_sitehome" class="menu" href="https://www.cnblogs.com/">
+博客园</a>
+</li>
+			<li>
+<a id="blog_nav_myhome" class="menu" href="https://www.cnblogs.com/houji/">
+首页</a>
+</li>
+			<li>
+
+<a id="blog_nav_newpost" class="menu" href="https://i.cnblogs.com/EditPosts.aspx?opt=1">
+新随笔</a>
+</li>
+			<li>
+<a id="blog_nav_contact" class="menu" href="https://msg.cnblogs.com/send/%E5%8E%9A%E7%A7%AF%EF%BC%81%EF%BC%81">
+联系</a></li>
+			<li>
+<a id="blog_nav_rss" class="menu" href="https://www.cnblogs.com/houji/rss/">
+订阅</a>
+<a id="blog_nav_rss_image" href="https://www.cnblogs.com/houji/rss/">
+    <img src="./未命名_files/xml.gif" alt="订阅">
+</a></li>
+			<li>
+<a id="blog_nav_admin" class="menu" href="https://i.cnblogs.com/">
+管理</a>
+</li>
+</ul>
+
+
+		
+<h3>统计</h3>
+<ul>
+    <li>随笔 - 
+56</li>
+    <li>文章 - 
+0</li>
+    <li>评论 - 
+0</li>
+    <li>
+        引用 - 
+0
+    </li>
+</ul>
+
+
+		
+<div id="sidebar_news" class="newsItem">
+<h3>公告</h3>
+
+<div id="blog-news">
+    
+    <div id="profile_block">
+        昵称：
+        <a href="https://home.cnblogs.com/u/houji/">
+            厚积！！
+        </a>
+        <br>
+        园龄：
+        <a href="https://home.cnblogs.com/u/houji/" title="入园时间：2016-01-22">
+            3年11个月
+        </a>
+        <br>
+        粉丝：
+        <a href="https://home.cnblogs.com/u/houji/followers/">
+            6
+        </a>
+        <br>
+        关注：
+        <a href="https://home.cnblogs.com/u/houji/followees/">
+            2
+        </a>
+        <div id="p_b_follow">
+<a href="javascript:void(0)" onclick="follow(&#39;a5e054ba-a8c0-e511-9fc1-ac853d9f53cc&#39;)">+加关注</a></div>
+        <script>getFollowStatus('a5e054ba-a8c0-e511-9fc1-ac853d9f53cc');</script>
+    </div>
+</div>
+
+</div>
+
+		<div id="blog-sidecolumn">
+<!-- 搜索 -->
+<div id="sidebar_search" class="sidebar-block">
+    <div id="sidebar_search" class="mySearch">
+        <h3 class="catListTitle">搜索</h3>
+        <div id="sidebar_search_box">
+            <div id="widget_my_zzk" class="div_my_zzk">
+                <input type="text" id="q" onkeydown="return zzk_go_enter(event);" class="input_my_zzk">&nbsp;<input onclick="zzk_go()" type="button" value="找找看" id="btnZzk" class="btn_my_zzk">
+            </div>
+            <div id="widget_my_google" class="div_my_zzk">
+                <input type="text" name="google_q" id="google_q" onkeydown="return google_go_enter(event);" class="input_my_zzk">&nbsp;<input onclick="google_go()" type="button" value="谷歌搜索" class="btn_my_zzk">
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 常用链接 -->
+<div id="sidebar_shortcut" class="sidebar-block">
+    
+<h3 class="catListTitle">
+常用链接
+</h3>
+<ul>
+        <li>
+
+<a href="https://www.cnblogs.com/houji/p/" title="我的博客的随笔列表">我的随笔</a>
+</li>
+        <li>
+
+<a href="https://www.cnblogs.com/houji/MyComments.html" title="我的发表过的评论列表">我的评论</a>
+</li>
+        <li>
+
+<a href="https://www.cnblogs.com/houji/OtherPosts.html" title="我评论过的随笔列表">我的参与</a>
+</li>
+        <li>
+
+<a href="https://www.cnblogs.com/houji/RecentComments.html" title="我的博客的评论列表">最新评论</a>
+</li>
+        <li>
+
+<a href="https://www.cnblogs.com/houji/tag/" title="我的博客的标签列表">我的标签</a>
+</li>
+</ul>
+
+<!-- TODO: 检查是否有使用这一部分的控件，如果没有则应该删除。 -->
+<div id="itemListLin_con" style="display:none">
+    <ul>
+
+    </ul>
+</div>
+
+</div>
+
+<!-- 最新随笔 -->
+
+
+
+<!-- 我的标签 -->
+<div id="sidebar_toptags" class="sidebar-block">
+    
+<h3>我的标签</h3>
+<div id="MyTag">
+    <ul>
+        
+        <li>
+            <a href="https://www.cnblogs.com/houji/tag/jsp/">jsp</a>(6)
+        </li>
+        <li>
+            <a href="https://www.cnblogs.com/houji/tag/java/">java</a>(4)
+        </li>
+        <li>
+            <a href="https://www.cnblogs.com/houji/tag/mvc/">mvc</a>(3)
+        </li>
+        <li>
+            <a href="https://www.cnblogs.com/houji/tag/web/">web</a>(3)
+        </li>
+        <li>
+            <a href="https://www.cnblogs.com/houji/tag/scala/">scala</a>(2)
+        </li>
+        <li>
+            <a href="https://www.cnblogs.com/houji/tag/ssh/">ssh</a>(2)
+        </li>
+        <li>
+            <a href="https://www.cnblogs.com/houji/tag/idea/">idea</a>(2)
+        </li>
+        <li>
+            <a href="https://www.cnblogs.com/houji/tag/css/">css</a>(2)
+        </li>
+        <li>
+            <a href="https://www.cnblogs.com/houji/tag/div/">div</a>(2)
+        </li>
+        <li>
+            <a href="https://www.cnblogs.com/houji/tag/git/">git</a>(2)
+        </li>
+            <li>
+                <a href="https://www.cnblogs.com/houji/tag/">更多</a>
+            </li>
+
+    </ul>
+</div>
+
+</div>
+
+<!-- 积分与排名 -->
+
+
+<!-- 随笔分类、随笔档案、文章分类、新闻分类、相册、链接 -->
+<div id="sidebar_categories">
+    
+        <h3>
+            
+
+随笔分类
+
+
+
+        </h3>
+        <ul>
+                    <li>
+                        
+<a href="https://www.cnblogs.com/houji/category/783905.html" rel="" target="">
+    hadoop(5)
+</a>
+ 
+
+                    </li>
+                    
+                    <li>
+                        
+<a href="https://www.cnblogs.com/houji/category/783903.html" rel="" target="">
+    java(12)
+</a>
+ 
+
+                    </li>
+                    
+                    <li>
+                        
+<a href="https://www.cnblogs.com/houji/category/783369.html" rel="" target="">
+    linux(3)
+</a>
+ 
+
+                    </li>
+                    
+                    <li>
+                        
+<a href="https://www.cnblogs.com/houji/category/783904.html" rel="" target="">
+    mysql(3)
+</a>
+ 
+
+                    </li>
+                    
+                    <li>
+                        
+<a href="https://www.cnblogs.com/houji/category/936446.html" rel="" target="">
+    scala(6)
+</a>
+ 
+
+                    </li>
+                    
+                    <li>
+                        
+<a href="https://www.cnblogs.com/houji/category/936448.html" rel="" target="">
+    spark(2)
+</a>
+ 
+
+                    </li>
+                    
+                    <li>
+                        
+<a href="https://www.cnblogs.com/houji/category/936447.html" rel="" target="">
+    大数据(1)
+</a>
+ 
+
+                    </li>
+                    
+        </ul>
+        <h3>
+            
+
+随笔档案
+
+
+
+        </h3>
+        <ul>
+                    <li>
+                        
+<a href="https://www.cnblogs.com/houji/archive/2019/01.html" rel="" target="">
+    2019年1月(1)
+</a>
+ 
+
+                    </li>
+                    
+                    <li>
+                        
+<a href="https://www.cnblogs.com/houji/archive/2018/11.html" rel="" target="">
+    2018年11月(1)
+</a>
+ 
+
+                    </li>
+                    
+                    <li>
+                        
+<a href="https://www.cnblogs.com/houji/archive/2018/08.html" rel="" target="">
+    2018年8月(1)
+</a>
+ 
+
+                    </li>
+                    
+                    <li>
+                        
+<a href="https://www.cnblogs.com/houji/archive/2018/06.html" rel="" target="">
+    2018年6月(1)
+</a>
+ 
+
+                    </li>
+                    
+                    <li>
+                        
+<a href="https://www.cnblogs.com/houji/archive/2018/04.html" rel="" target="">
+    2018年4月(3)
+</a>
+ 
+
+                    </li>
+                    
+                    <li>
+                        
+<a href="https://www.cnblogs.com/houji/archive/2017/12.html" rel="" target="">
+    2017年12月(2)
+</a>
+ 
+
+                    </li>
+                    
+                    <li>
+                        
+<a href="https://www.cnblogs.com/houji/archive/2017/10.html" rel="" target="">
+    2017年10月(2)
+</a>
+ 
+
+                    </li>
+                    
+                    <li>
+                        
+<a href="https://www.cnblogs.com/houji/archive/2017/08.html" rel="" target="">
+    2017年8月(5)
+</a>
+ 
+
+                    </li>
+                    
+                    <li>
+                        
+<a href="https://www.cnblogs.com/houji/archive/2017/07.html" rel="" target="">
+    2017年7月(2)
+</a>
+ 
+
+                    </li>
+                    
+                    <li>
+                        
+<a href="https://www.cnblogs.com/houji/archive/2017/04.html" rel="" target="">
+    2017年4月(1)
+</a>
+ 
+
+                    </li>
+                    
+                    <li>
+                        
+<a href="https://www.cnblogs.com/houji/archive/2017/02.html" rel="" target="">
+    2017年2月(1)
+</a>
+ 
+
+                    </li>
+                    
+                    <li>
+                        
+<a href="https://www.cnblogs.com/houji/archive/2017/01.html" rel="" target="">
+    2017年1月(7)
+</a>
+ 
+
+                    </li>
+                    
+                    <li>
+                        
+<a href="https://www.cnblogs.com/houji/archive/2016/03.html" rel="" target="">
+    2016年3月(9)
+</a>
+ 
+
+                    </li>
+                    
+                    <li>
+                        
+<a href="https://www.cnblogs.com/houji/archive/2016/02.html" rel="" target="">
+    2016年2月(15)
+</a>
+ 
+
+                    </li>
+                    
+                    <li>
+                        
+<a href="https://www.cnblogs.com/houji/archive/2016/01.html" rel="" target="">
+    2016年1月(5)
+</a>
+ 
+
+                    </li>
+                    
+        </ul>
+
+</div>
+
+<!-- 最新评论 -->
+<div id="sidebar_recentcomments" class="sidebar-block">
+    
+</div>
+
+
+
+<!-- 阅读排行榜 -->
+<div id="sidebar_topviewedposts" class="sidebar-block">
+    
+<div id="topview_posts_wrap">
+    <h3 class="catListTitle">阅读排行榜</h3>
+    <div id="TopViewPostsBlock">
+        <ul style="word-break:break-all">
+                    <li>
+                        <a href="https://www.cnblogs.com/houji/p/5179705.html">
+                            1. MYSQL获取自增ID的四种方法(37112)
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://www.cnblogs.com/houji/p/5294491.html">
+                            2. linux中ssh登录Permanently added (RSA) to the list of known hosts问题解决(36652)
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://www.cnblogs.com/houji/p/5192950.html">
+                            3. JS中获取页面单选框radio和复选框checkbox中当前选中的值(29295)
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://www.cnblogs.com/houji/p/5192968.html">
+                            4. 常用的JS页面跳转代码调用大全(14054)
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://www.cnblogs.com/houji/p/5230626.html">
+                            5. 让上下两个DIV块之间有一定距离或没有距离(11603)
+                        </a>
+                    </li>
+        </ul>
+    </div>
+</div>
+</div>
+
+<!-- 评论排行榜 -->
+<div id="sidebar_topcommentedposts" class="sidebar-block">
+    
+</div>
+
+<!-- 推荐排行榜 -->
+<div id="sidebar_topdiggedposts" class="sidebar-block">
+    
+<div id="topdigg_posts_wrap">
+    <div class="catListView">
+        <h3 class="catListTitle">推荐排行榜</h3>
+        <div id="TopDiggPostsBlock">
+            <ul style="word-break: break-all">
+                        <li>
+                            <a href="https://www.cnblogs.com/houji/p/6275551.html">
+                                1. scala集合和高级函数操作(1)
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://www.cnblogs.com/houji/p/5294491.html">
+                                2. linux中ssh登录Permanently added (RSA) to the list of known hosts问题解决(1)
+                            </a>
+                        </li>
+            </ul>
+        </div>
+    </div>
+</div>
+</div></div>
+                    <script>loadBlogSideColumn();</script>
+	
+</div>
+			
+			
+			
+			
+			 
+
+	
+
+
+    
+
+</body></html>
